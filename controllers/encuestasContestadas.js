@@ -1,7 +1,7 @@
 'Use Strict';
 var validator = require('validator');
-var EncuestaC = require('../Modelos/encuestasContestadas');
-var Empleado = require('../Modelos/empleados');
+var EncuestaC = require('../models/encuestasContestadas');
+var Empleado = require('../models/empleados');
 var moment = require('moment');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');

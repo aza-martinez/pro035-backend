@@ -1,7 +1,7 @@
 'Use Strict';
 
 var validator = require('validator');
-var Empleado = require('../Modelos/empleados');
+var Empleado = require('../models/empleados');
 var moment = require('moment');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');

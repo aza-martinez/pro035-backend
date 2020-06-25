@@ -1,104 +1,100 @@
-'Use Strict'
-var Encuesta = require('../Modelos/encuestas');
+'Use Strict';
+var Encuesta = require('../models/encuestas');
 var moment = require('moment');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 var momentz = require('moment-timezone');
 
-var controller = { //Inicio Del Controlador 
+var controller = {
+	//Inicio Del Controlador
 
-    listarE: async(req, res) => {
-        var idEncuesta = req.params.idEncuesta;
-        Encuesta.find({_id:idEncuesta})
-        .populate({ 
-            path: 'idCategoria',
-            populate: {
-                path: 'idDominio',
-                model: 'Dominios',
+	listarE: async (req, res) => {
+		var idEncuesta = req.params.idEncuesta;
+		Encuesta.find({ _id: idEncuesta })
+			.populate({
+				path: 'idCategoria',
+				populate: {
+					path: 'idDominio',
+					model: 'Dominios',
 
-                    populate: {
-                        path: 'idDimension',
-                        model: 'Dimensiones',
+					populate: {
+						path: 'idDimension',
+						model: 'Dimensiones',
 
-                            populate: {
-                                path: 'idPreguntas',
-                                model: 'Preguntas',
+						populate: {
+							path: 'idPreguntas',
+							model: 'Preguntas',
 
-                                    populate: [{
-                                        path: 'idMensaje',
-                                        model: 'Mensajes',
-                                    },{
-                                        path: 'idRespuestas',
-                                        model: 'Respuestas',
-                            }] 
-                            }
-                    }
-            }
-    })
-        .sort([['date', 'descending']])                   
-        .exec((err, registros) => {        
-                if (err) {
-                    console.log(err);
-                    return res.status(500).send({err});
-                }
-                if (!registros || registros.length <= 0) {}  
-     
-                console.log(registros);
-                return res.status(200).send(registros)
-        });
-    },
+							populate: [
+								{
+									path: 'idMensaje',
+									model: 'Mensajes',
+								},
+								{
+									path: 'idRespuestas',
+									model: 'Respuestas',
+								},
+							],
+						},
+					},
+				},
+			})
+			.sort([['date', 'descending']])
+			.exec((err, registros) => {
+				if (err) {
+					console.log(err);
+					return res.status(500).send({ err });
+				}
+				if (!registros || registros.length <= 0) {
+				}
 
-listarT: async(req, res) => {
-    var nombre = req.params.nombre;
-    Encuesta.find({})
-    .populate({ 
-        path: 'idCategoria',
-            populate: {
-                path: 'idDominio',
-                model: 'Dominios',
+				console.log(registros);
+				return res.status(200).send(registros);
+			});
+	},
 
-                    populate: {
-                        path: 'idDimension',
-                        model: 'Dimensiones',                     
+	listarT: async (req, res) => {
+		var nombre = req.params.nombre;
+		Encuesta.find({})
+			.populate({
+				path: 'idCategoria',
+				populate: {
+					path: 'idDominio',
+					model: 'Dominios',
 
-                            populate: {
-                                path: 'idPreguntas',
-                                model: 'Preguntas',  
+					populate: {
+						path: 'idDimension',
+						model: 'Dimensiones',
 
-                                    populate: [{
-                                        path: 'idMensaje',
-                                        model: 'Mensajes',
-                                    },{
-                                        path: 'idRespuestas',
-                                        model: 'Respuestas',                             
-                                    
-                            }]
-                                         
-                            }
-                    }         
-            }  
-    })  
-    .sort([['date', 'descending']])                   
-    .exec((err, registros) => {            
-            if (err) {
-                return res.status(500).send({err});
-            }
-            if (!registros || registros.length <= 0) {}  
- 
-            console.log(registros);
-            return res.status(200).send(registros)
-    });
-}
+						populate: {
+							path: 'idPreguntas',
+							model: 'Preguntas',
 
+							populate: [
+								{
+									path: 'idMensaje',
+									model: 'Mensajes',
+								},
+								{
+									path: 'idRespuestas',
+									model: 'Respuestas',
+								},
+							],
+						},
+					},
+				},
+			})
+			.sort([['date', 'descending']])
+			.exec((err, registros) => {
+				if (err) {
+					return res.status(500).send({ err });
+				}
+				if (!registros || registros.length <= 0) {
+				}
 
-
-
-
-
-
-
-
-
-
+				console.log(registros);
+				return res.status(200).send(registros);
+			});
+	},
 };
 module.exports = controller;

@@ -1,6 +1,6 @@
 'Use Strict';
-const Area = require('../Modelos/areas');
-const Centro = require('../Modelos/centros');
+const Area = require('../models/areas');
+const Centro = require('../models/centros');
 const moment = require('moment');
 
 const controller = {
