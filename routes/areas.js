@@ -1,16 +1,14 @@
-'use strict'
+'use strict';
 var express = require('express');
-
-var AreasController = require('../Controladores/areas');
-var auth0 = require('../Middleware/auth0');
+var AreasController = require('../controllers/areas');
+var auth0 = require('../helpers/auth0');
 var router = express.Router();
+var multipart = require('connect-multiparty');
+var multipartMiddleware = multipart();
 
 // Rutas útiles
-router.post('/area/guardar/:idCentro',  AreasController.guardar); 
-router.post('/area/importar',  AreasController.importar); 
-router.get('/area/listarA/',   AreasController.listarAA); 
-router.get('/area/listarI/',   AreasController.listarAI); 
-router.get('/area/buscar/:buscar?',   AreasController.buscar);
-router.put('/area/desactivar/:id',   AreasController.desactivar); 
-router.put('/area/modificar/:id',   AreasController.modificar); 
+router.post('/area/guardar/:idCentro', AreasController.guardar);
+router.get('/area/listar/', AreasController.listar);
+router.put('/area/desactivar/:id', AreasController.eliminar);
+router.put('/area/modificar/:id', AreasController.modificar);
 module.exports = router;

@@ -1,7 +1,7 @@
 'use strict';
 var express = require('express');
-var EmpleadosController = require('../Controladores/empleados');
-var auth0 = require('../Middleware/auth0');
+var EmpleadosController = require('../controllers/empleados');
+var auth0 = require('../helpers/auth0');
 var router = express.Router();
 
 // Rutas útiles

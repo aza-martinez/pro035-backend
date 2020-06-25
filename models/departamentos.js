@@ -1,14 +1,15 @@
-'use strict'
+'use strict';
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const jwt = require('jsonwebtoken');
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-
-var DepartamentosSchema = Schema({
-    nombre: String,
-    estatus: Boolean,
-    timestamp: Date,
-    idEmpleados:  [{ type: Schema.ObjectId, ref: "Empleados" }],
-    }, { versionKey: false });
+const DepartamentosSchema = Schema(
+	{
+		nombre: String,
+		estatus: Boolean,
+		timestamp: Date,
+		idEmpleados: [{ type: Schema.ObjectId, ref: 'Empleados' }],
+	},
+	{ versionKey: false }
+);
 
 module.exports = mongoose.model('Departamento', DepartamentosSchema);
