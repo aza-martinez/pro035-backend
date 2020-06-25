@@ -29,10 +29,6 @@ if (node_env === 'production') {
 			console.log('Servidor Pro-035 Corriendo En: ' + puerto);
 			console.log('ENTORNO: ' + node_env);
 		});
-	app.listen(80, () => {
-		console.log('Servidor corriendo en http://localhost: ' + 80);
-		console.log('ENTORNO: ' + node_env);
-	});
 } else {
 	app.listen(puertoDev, () => {
 		console.log('Servidor corriendo en http://localhost: ' + puertoDev);

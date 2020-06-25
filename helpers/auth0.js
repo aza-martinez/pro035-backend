@@ -11,10 +11,10 @@ var jwtCheck = jwt({
 		cache: true,
 		rateLimit: true,
 		jwksRequestsPerMinute: 5,
-		jwksUri: 'https://pro35.auth0.com/.well-known/jwks.json',
+		jwksUri: 'https://pro035.us.auth0.com/.well-known/jwks.json',
 	}),
-	audience: 'http://pro35',
-	issuer: 'https://pro35.auth0.com/',
+	audience: 'https://Pro035',
+	issuer: 'https://pro035.us.auth0.com/',
 	algorithms: ['RS256'],
 	getToken: function fromHeaderOrQuerystring(req) {
 		if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
@@ -22,9 +22,7 @@ var jwtCheck = jwt({
 		} else if (req.query && req.query.token) {
 			return res.status(401).send('Acceso Denegado, Token Incorrecto...');
 		}
-		// console.log(req);
-
-		return null;
+		return;
 	},
 });
 

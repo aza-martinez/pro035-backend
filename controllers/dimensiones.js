@@ -1,16 +1,16 @@
 'Use Strict';
-var Dimension = require('../models/dimensiones');
-var Pregunta = require('../models/preguntas');
-var moment = require('moment');
+const Dimension = require('../models/dimensiones');
+const Pregunta = require('../models/preguntas');
+const moment = require('moment');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-var momentz = require('moment-timezone');
+const momentz = require('moment-timezone');
 
-var controller = {
+const controller = {
 	//Inicio Del Controlador
 	guardar: async (req, res) => {
 		const dimension = new Dimension();
-		var params = req.body;
+		const params = req.body;
 		let fechaMX = moment(fecha).tz('America/Mexico_City');
 		dimension.numGuia = params.numGuia;
 		dimension.nombreDimension = params.nombreDimension;
@@ -19,7 +19,7 @@ var controller = {
 		console.log(params.preguntas);
 		//dimension.preguntas.push(params.preguntas);
 		dimension.preguntas = params.preguntas;
-		var fecha = new Date();
+		const fecha = new Date();
 		dimension.timestamp = fechaMX._d;
 		dimension.save((err, dimensionStored) => {
 			if (err || !dimensionStored) {
@@ -32,8 +32,8 @@ var controller = {
 
 	listar: async (req, res) => {
 		nombre = req.params.nombre;
-		var query = Dimension.find({ nombreDimension: nombre });
-		var last = req.params.last;
+		const query = Dimension.find({ nombreDimension: nombre });
+		const last = req.params.last;
 		if (last || last != undefined) {
 			query.limit(5);
 		}
@@ -49,7 +49,7 @@ var controller = {
 	},
 
 	listar2: (req, res) => {
-		var nombre = req.params.nombre;
+		const nombre = req.params.nombre;
 		Dimension.find({ nombreDimension: nombre })
 			.populate('idPreguntas')
 			.sort([['date', 'descending']])

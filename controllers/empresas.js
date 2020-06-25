@@ -1,37 +1,46 @@
 'Use Strict';
 
-var validator = require('validator');
-var Empresa = require('../models/empresas');
-var Centro = require('../models/centros');
-var Area = require('../models/areas');
-var moment = require('moment');
-const bcryptjs = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-var momentz = require('moment-timezone');
+const validator = require('validator');
+const Empresa = require('../models/empresas');
+const Centro = require('../models/centros');
+const Area = require('../models/areas');
+const moment = require('moment');
+var envJSON = require('../env.variables.json');
+var node_env = process.env.NODE_ENV || 'development';
+const Mongo = require('../helpers/mongo');
 
-var controller = {
+if (node_env == 'production') {
+	var data = envJSON[node_env].METADATA_P;
+} else {
+	var data = envJSON[node_env].METADATA_D;
+}
+const controller = {
 	//Inicio Del Controlador
 	guardar: async (req, res) => {
 		//guardar empresa
-		var params = req.body;
-		let fecha = new Date();
-		let fechaMX = moment(fecha).tz('America/Mexico_City');
+		/* 		const SERVER_BD = req.user[`${data}`].empresa;
+		const mongo = new Mongo();
+		await mongo.connect(SERVER_BD);
+		const close = await mongo.close(); */
+		const params = req.body;
+		const fecha = new Date();
+		const fechaMX = moment(fecha).tz('America/Mexico_City');
 
 		try {
 			//VALIDACION DE DATOS DE EMPRESA
-			var val_empresa_razonSocial = !validator.isEmpty(params.empresaRazonSocial);
-			var val_empresa_alias = !validator.isEmpty(params.empresaAlias);
-			var val_empresa_calle = !validator.isEmpty(params.empresaCalle);
-			var val_empresa_colonia = !validator.isEmpty(params.empresaColonia);
-			var val_empresa_cp = !validator.isEmpty(params.empresaCP);
-			var val_empresa_rfc = !validator.isEmpty(params.empresaRFC);
+			const val_empresa_razonSocial = !validator.isEmpty(params.empresaRazonSocial);
+			const val_empresa_alias = !validator.isEmpty(params.empresaAlias);
+			const val_empresa_calle = !validator.isEmpty(params.empresaCalle);
+			const val_empresa_colonia = !validator.isEmpty(params.empresaColonia);
+			const val_empresa_cp = !validator.isEmpty(params.empresaCP);
+			const val_empresa_rfc = !validator.isEmpty(params.empresaRFC);
 
 			//VALIDACION DE DATOS DE CENTRO DE TRABAJO
-			var val_centro_nombre = !validator.isEmpty(params.centroNombre);
-			var val_centro_telefono = !validator.isEmpty(params.centroTelefono);
-			var val_centro_calle = !validator.isEmpty(params.centroCalle);
-			var val_centro_colonia = !validator.isEmpty(params.centroColonia);
-			var val_centro_cp = !validator.isEmpty(params.centroCP);
+			const val_centro_nombre = !validator.isEmpty(params.centroNombre);
+			const val_centro_telefono = !validator.isEmpty(params.centroTelefono);
+			const val_centro_calle = !validator.isEmpty(params.centroCalle);
+			const val_centro_colonia = !validator.isEmpty(params.centroColonia);
+			const val_centro_cp = !validator.isEmpty(params.centroCP);
 		} catch (err) {
 			return res.status(500).send({
 				status: 'error',
@@ -39,8 +48,8 @@ var controller = {
 			});
 		}
 
-		var val_area_nombre = !validator.isEmpty(params.areaNombre);
-		var val_area_descripcion = !validator.isEmpty(params.areaDescripcion);
+		const val_area_nombre = !validator.isEmpty(params.areaNombre);
+		const val_area_descripcion = !validator.isEmpty(params.areaDescripcion);
 
 		if (
 			val_empresa_razonSocial &&
@@ -86,7 +95,7 @@ var controller = {
 			empresa.idCentro.push(centro._id);
 
 			if (val_area_descripcion && val_area_nombre) {
-				let area_existe = await Area.findOne({ nombre: params.areaNombre });
+				const area_existe = await Area.findOne({ nombre: params.areaNombre });
 				if (area_existe) {
 					return res.status(400).send('El Area Ya Existe.... Se Omitira El Área');
 				}
@@ -102,8 +111,8 @@ var controller = {
 			} else {
 			}
 
-			let centro_existe = await Centro.findOne({ nombre: params.centroNombre });
-			let empresa_existe = await Empresa.findOne({ rfc: params.empresaRFC });
+			const centro_existe = await Centro.findOne({ nombre: params.centroNombre });
+			const empresa_existe = await Empresa.findOne({ rfc: params.empresaRFC });
 			if (empresa_existe || centro_existe) {
 				return res.status(400).send('La Empresa O Centro Ya Existe.... Se Omitira El Centro O La Empresa');
 			}
@@ -128,78 +137,46 @@ var controller = {
 		} //FIN DE LA VALIDACION DE DATOS DE CENTRO Y EMPRESA
 	}, //fin de guardar empresa
 
-	listarEA: async (req, res) => {
-		var nombre = req.params.nombre;
-		Empresa.find({ estatus: true })
-			.populate({
-				path: 'idCentro',
-				populate: {
-					path: 'idPeriodo',
-					model: 'Periodos',
-				},
-			})
-			.sort([['date', 'descending']])
-			.exec((err, registros) => {
-				if (err) {
-					return res.status(500).send({ err });
-				}
-				if (!registros || registros.length <= 0) {
-				}
-				return res.status(200).send(registros);
-			});
+	listar: async (req, res) => {
+		const SERVER_BD = req.user[`${data}`].empresa;
+		const mongo = new Mongo();
+		await mongo.connect(SERVER_BD);
+		console.log(SERVER_BD);
+		try {
+			Empresa.find({ estatus: true })
+				.populate({
+					path: 'idCentro',
+					populate: {
+						path: 'idPeriodo',
+						model: 'Periodos',
+					},
+				})
+				.exec(async (err, registros) => {
+					if (err) {
+						console.log(err);
+						const close = await mongo.close();
+						return res.status(500).send({ err });
+					}
+					if (!registros || registros.length <= 0) {
+						console.log(registros);
+					}
+					console.log(registros);
+					const close = await mongo.close();
+					return res.status(200).send(registros);
+				});
+		} catch (error) {
+			console.log(error);
+			const close = await mongo.close();
+		}
+		//const close = await mongo.close();
 	},
 
-	listarEI: async (req, res) => {
-		//listar empresas inactivas
-		var query = Empresa.find({ estatus: false });
-		var last = req.params.last;
-		if (last || last != undefined) {
-			query.limit(5);
-		}
-		query.sort('-_id').exec((err, empresas) => {
-			if (err) {
-				return res.status(500).send({});
-			}
-			if (!empresas) {
-				return res.status(404).send({});
-			}
-			return res.status(200).send({ empresas });
-		});
-	}, //fin de listar empresas inactivas
-
-	desactivar: async (req, res) => {
-		//Metodo Guardar
-		var empID = req.params.id;
-		var params = req.body;
+	eliminar: async (req, res) => {
+		const empID = req.params.id;
+		const params = req.body;
 		Empresa.findOneAndUpdate({ _id: empID }, { estatus: false }, (err, empresaHide) => {
 			return res.status(200).send('Empresa Desactivada.');
 		});
 	},
-
-	buscar: async (req, res) => {
-		//Metodo Guardar
-		var buscar = req.params.buscar;
-		Empresa.find({
-			$or: [
-				{ alias: { $regex: buscar, $options: 'i' } },
-				{ rfc: { $regex: buscar, $options: 'i' } },
-				{ razonSocial: { $regex: buscar, $options: 'i' } },
-			],
-		})
-			.sort([['date', 'descending']])
-			.exec((err, empresaSearch) => {
-				if (err) {
-					return res.status(500).send({});
-				}
-				if (!empresaSearch || empresaSearch.length <= 0) {
-					return res.status(404).send({});
-				}
-				return res.status(200).send({ empresaSearch });
-			});
-	},
-
-	importar: async (req, res) => {
-		//importar varias empresas a la vez
-	}, //fin de importar empresas
 };
 module.exports = controller;

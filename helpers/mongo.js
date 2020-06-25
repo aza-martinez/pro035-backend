@@ -7,7 +7,7 @@ class Mongo {
 	async connect(nameBD) {
 		await mongoose.connection.close();
 		await mongoose
-			.connect(`mongodb+srv://srendon:tT2WwrqXoeiJgHp6@cluster0-hjkav.azure.mongodb.net/pro_${nameBD}?retryWrites=true&w=majority`, {
+			.connect(`mongodb+srv://srendon:tT2WwrqXoeiJgHp6@cluster0-hjkav.azure.mongodb.net/nom35_${nameBD}?retryWrites=true&w=majority`, {
 				useNewUrlParser: true,
 				useFindAndModify: false,
 				useCreateIndex: true,

@@ -7,9 +7,6 @@ var router = express.Router();
 
 // Rutas útiles
 router.post('/empresa/guardar', EmpresasController.guardar);
-router.post('/empresa/importar', EmpresasController.importar);
-router.get('/empresa/listar/', EmpresasController.listarEA);
-router.get('/empresa/listarI/', EmpresasController.listarEI);
-router.get('/empresa/buscar/:buscar?', EmpresasController.buscar);
-router.put('/empresa/desactivar/:id', EmpresasController.desactivar);
+router.get('/empresa/listar/', auth0, EmpresasController.listar);
+router.put('/empresa/desactivar/:id', EmpresasController.eliminar);
 module.exports = router;
