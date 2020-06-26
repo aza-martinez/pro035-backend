@@ -10,6 +10,7 @@
     "author": "ALEJANDRO RENDON MIRELES",
     "license": "MIT",
     "dependencies": {
+        "@auth0/nextjs-auth0": "^0.13.0",
         "auth0-js": "^9.12.1",
         "axios": "^0.19.0",
         "azure": "^2.3.1-preview",
@@ -49,6 +50,7 @@
         "pdfmake": "^0.1.62",
         "read-excel-file": "^4.0.3",
         "sha256": "^0.2.0",
+        "tslib": "^2.0.0",
         "validator": "^11.1.0",
         "xls-to-json-lc": "^0.3.4",
         "xlsx": "^0.15.1",
