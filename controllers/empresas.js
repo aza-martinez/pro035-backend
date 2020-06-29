@@ -143,7 +143,7 @@ const controller = {
 		await mongo.connect(SERVER_BD);
 		console.log(SERVER_BD);
 		try {
-			Empresa.find({ estatus: true })
+			Empresa.find()
 				.populate({
 					path: 'idCentro',
 					populate: {
@@ -167,6 +167,7 @@ const controller = {
 		} catch (error) {
 			console.log(error);
 			const close = await mongo.close();
+			return res.status(500).send(error);
 		}
 		//const close = await mongo.close();
 	},

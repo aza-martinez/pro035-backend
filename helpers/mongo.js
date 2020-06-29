@@ -7,14 +7,15 @@ class Mongo {
 	async connect(nameBD) {
 		await mongoose.connection.close();
 		await mongoose
-			.connect(`mongodb+srv://srendon:tT2WwrqXoeiJgHp6@cluster0-hjkav.azure.mongodb.net/nom35_${nameBD}?retryWrites=true&w=majority`, {
-				useNewUrlParser: true,
-				useFindAndModify: false,
-				useCreateIndex: true,
-				useUnifiedTopology: true,
-			})
-			.then(function() {})
-			.catch(function(error) {});
+      .connect(
+        `mongodb+srv://Pro035mdb:MyiId3lB35CDkURk@pro035cluster-len4q.mongodb.net/Pro035_${nameBD}?retryWrites=true&w=majority`,
+        {
+          useNewUrlParser: true,
+          useFindAndModify: false,
+          useCreateIndex: true,
+          useUnifiedTopology: true,
+        }
+      );
 	}
 
 	async close() {

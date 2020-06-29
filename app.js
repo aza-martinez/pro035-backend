@@ -28,7 +28,7 @@ app.use(bodyParser.json());
 
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", `${req.headers.origin}`);
+  res.header("Access-Control-Allow-Origin", `*`);
   res.header("Access-Control-Allow-Credentials", "true");
   res.header(
     "Access-Control-Allow-Headers",
@@ -42,17 +42,17 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(async function(req, res, next) {
-	try {
-		const tokenCache = await auth0.tokenCache(req, res);
-		const { accessToken } = await tokenCache.getAccessToken();
-		req.headers.authorization = `Bearer ${accessToken}`;
-		next();
-	} catch (error) {
-		console.log(error);
-		res.status(500).send('Error Interno');
-	}
-});
+// app.use(async function(req, res, next) {
+// 	try {
+// 		const tokenCache = await auth0.tokenCache(req, res);
+// 		const { accessToken } = await tokenCache.getAccessToken();
+// 		req.headers.authorization = `Bearer ${accessToken}`;
+// 		next();
+// 	} catch (error) {
+// 		console.log(error);
+// 		res.status(500).send('Error Interno');
+// 	}
+// });
 
 app.use("/api", [
   rutaEmpresa,
