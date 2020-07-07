@@ -1,27 +1,23 @@
-'use strict';
+"use strict";
 
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+require('dotenv').config({ path: 'variables.env' });
 process.setMaxListeners(0);
 
-class Mongo {
-	async connect(nameBD) {
-		await mongoose.connection.close();
-		await mongoose
-      .connect(
-        `mongodb+srv://Pro035mdb:MyiId3lB35CDkURk@pro035cluster-len4q.mongodb.net/Pro035_${nameBD}?retryWrites=true&w=majority`,
-        {
-          useNewUrlParser: true,
-          useFindAndModify: false,
-          useCreateIndex: true,
-          useUnifiedTopology: true,
-        }
-      );
-	}
-
-	async close() {
-		await mongoose.connection.close(() => {});
-		return true;
-	}
+const conectarDB = async () => {
+  try {
+    await mongoose.connect(process.env.DB_MONGO, {
+      useNewUrlParser: true,
+      useFindAndModify: false,
+      useCreateIndex: true,
+      useUnifiedTopology: true,
+    });
+    console.log('DB conectada');
+  } catch (error) {
+    console.log('Error Interno');
+    console.log(error);
+    process.exit(1);
+  }
 }
 
-module.exports = Mongo;
+module.exports = conectarDB;

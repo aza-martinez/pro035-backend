@@ -2,7 +2,7 @@
 
 const mongoose = require('mongoose');
 
-const EmpresasSchema = mongoose.Schema(
+const ClientesSchema = mongoose.ClientesSchema(
 	{
 		razonSocial: {
 			type: String,
@@ -29,8 +29,8 @@ const EmpresasSchema = mongoose.Schema(
 		rfc: {
 			type: String,
 			trim: true,
-			minlength: [ 12, 'RFC no válido' ],
-			maxlength: [13, 'RFC no válido']
+			minLength: [ 12, 'RFC no válido' ],
+			maxLength: [ 13, 'RFC no válido' ]
 		},
 		estatus: {
 			type: Boolean,
@@ -39,13 +39,10 @@ const EmpresasSchema = mongoose.Schema(
 		timestamp: {
 			type: Date,
 			default: Date.now()
-		},
-		idCentro: [ { type: mongoose.Schema.ObjectId, ref: 'Centro' } ],
-		idArea: [ { type: mongoose.Schema.ObjectId, ref: 'Area' } ],
-		areas: [ { type: mongoose.Schema.ObjectId, ref: 'Area' } ],
-		centrosTrabajo: [ { type: mongoose.Schema.ObjectId, ref: 'Centro' } ]
+		}
 	},
-	{ versionKey: false }
+	{ versionKey: false },
+	
 );
 
-module.exports = mongoose.model('Empresa', EmpresasSchema);
+module.exports = mongoose.model('Cliente', ClientesSchema);

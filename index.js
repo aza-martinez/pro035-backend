@@ -1,41 +1,27 @@
-"use strict";
+'use strict';
+//Variables a utilizar.
+const { ApolloServer } = require('apollo-server');
+const typeDefs = require('./graphql/schema');
+const resolvers = require('./graphql/resolvers');
+const conectarDB = require('./helpers/mongo');
 
-const mongoose = require("mongoose");
-const app = require("./app");
-const envJSON = require("./env.variables.json");
-const fs = require("fs");
-const https = require("https");
-const node_env = process.env.NODE_ENV || "development";
-const puerto = process.env.PORT || envJSON[node_env].PORT_P;
-const puertoDev = process.env.PORT || envJSON[node_env].PORT_D;
+conectarDB();
 
-mongoose.set("useFindAndModify", false);
-mongoose.Promise = global.Promise;
+// SERVIDOR
+const server = new ApolloServer({
+    cors: {
+        origin: "http://localhost:3000",
+        methods: "POST",
+        optionsSuccessStatus: 204,
+        credentials: true
+    },
+    typeDefs,
+    resolvers,
+});
 
-//HTTPS
 
-// if (node_env === "production") {
-//   const key = ""; //envJSON[node_env].KEY_SSL_P;
-//   const cert = ""; //envJSON[node_env].CERT_SSL_P;
-//   https
-//     .createServer(
-//       {
-//         key: fs.readFileSync(key),
-//         cert: fs.readFileSync(cert),
-//       },
-//       app
-//     )
-//     .listen(puerto, function () {
-//       console.log("Servidor Pro-035 Corriendo En: " + puerto);
-//       console.log("ENTORNO: " + node_env);
-//     });
-// } else {
-//   app.listen(puertoDev, () => {
-//     console.log("Servidor corriendo en http://localhost: " + puertoDev);
-//     console.log("ENTORNO: " + node_env);
-//   });
-// }
-  app.listen(puertoDev, () => {
-    console.log("Servidor corriendo en http://localhost: " + puertoDev);
-    console.log("ENTORNO: " + node_env);
-  });
+server.listen().then(({ url }) => {
+	console.log(`SERVIDOR LISTO EN LA URL: ${url}`);
+});
+
+module.exports = server;
