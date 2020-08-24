@@ -44,7 +44,7 @@ const auth0 = initAuth0({
 const server = new ApolloServer({
   cors: {
     origin: "https://pro035.itcomsoft.vercel.app",
-    methods: "POST",
+    methods: "POST, GET, OPTIONS",
     optionsSuccessStatus: 204,
     credentials: true,
   },
