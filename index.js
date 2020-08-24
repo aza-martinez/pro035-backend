@@ -43,7 +43,7 @@ const auth0 = initAuth0({
 // SERVIDOR
 const server = new ApolloServer({
   cors: {
-    origin: "http://localhost:3000",
+    origin: "https://pro035.itcomsoft.vercel.app",
     methods: "POST",
     optionsSuccessStatus: 204,
     credentials: true,
