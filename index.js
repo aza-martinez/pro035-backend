@@ -45,7 +45,7 @@ const server = new ApolloServer({
   cors: {
     origin: "https://pro035.itcomsoft.vercel.app",
     methods: "POST, GET, OPTIONS",
-    optionsSuccessStatus: 204,
+    optionsSuccessStatus: 200,
     credentials: true,
   },
   typeDefs,
