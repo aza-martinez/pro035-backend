@@ -15,8 +15,8 @@ const auth0 = initAuth0({
     "X3nEk2NO2lYUBLkgu2v1r_8uatuH-eqESKRP-Q04Qhptvk445mlH3ZaZdNIxjpaf",
   scope: "openid profile",
   audience: "https://Pro035",
-  redirectUri: "https://pro035.itcomsoft.vercel.app/api/callback",
-  postLogoutRedirectUri: "https://pro035.itcomsoft.vercel.app/",
+  redirectUri: "https://portal.pro035.com/api/callback",
+  postLogoutRedirectUri: "https://portal.pro035.com",
   session: {
     // The secret used to encrypt the cookie.
     cookieSecret:
@@ -43,7 +43,7 @@ const auth0 = initAuth0({
 // SERVIDOR
 const server = new ApolloServer({
   cors: {
-    origin: "https://pro035.itcomsoft.vercel.app",
+    origin: "http://localhost:3000",
     methods: "POST, GET, OPTIONS",
     optionsSuccessStatus: 200,
     credentials: true,

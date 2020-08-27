@@ -41,8 +41,8 @@ const typeDefs = gql`
     nombre: String
     apellidoPaterno: String
     apellidoMaterno: String
-    sexo: String
-    edad: Int
+    genero: String
+    rangoEdad: String
     estadoCivil: String
     nivelEstudios: String
     tipoPuesto: String
@@ -50,7 +50,7 @@ const typeDefs = gql`
     tipoPersonal: String
     tipoJornada: String
     rolarTurnos: String
-    experienciaPuestoAcutal: String
+    experienciaPuestoActual: String
     tiempoExperienciaLaboral: String
     email: String
     perfil: String
@@ -168,8 +168,8 @@ const typeDefs = gql`
     nombre: String!
     apellidoPaterno: String!
     apellidoMaterno: String!
-    sexo: String
-    edad: Int
+    genero: String
+    rangoEdad: String
     estadoCivil: String
     nivelEstudios: String
     tipoPuesto: String
@@ -177,15 +177,15 @@ const typeDefs = gql`
     tipoPersonal: String
     tipoJornada: String
     rolarTurnos: String
-    experienciaPuestoAcutal: String
+    experienciaPuestoActual: String
     tiempoExperienciaLaboral: String
     email: String
-    perfil: String!
-    usuario: String!
+    perfil: String
+    usuario: String
     password: String
     cliente: ID
     empresa: ID
-    centroTrabajo: ID!
+    centroTrabajo: ID
   }
 
   input AutenticarInput {

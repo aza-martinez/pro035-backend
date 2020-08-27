@@ -4,12 +4,11 @@ const UsuarioModelo = require("../models/UsuarioModelo");
 const validarUsuario = require("../helpers/validarUsuario");
 const CentroTrabajoModelo = require("./../models/CentroTrabajoModelo");
 const PuestosModelo = require("./../models/PuestosModelo");
-const { findOne } = require("../models/UsuarioModelo");
 
 const UsuarioController = {
   Query: {
     obtenerUsuarios: async (_, { empresa }, { usuario }) => {
-      const { cliente } = await validarUsuario(usuario, "Administrador");
+      const { cliente } =  await validarUsuario(usuario, "Administrador");
 
       const usuarios = await UsuarioModelo.find({
         $and: [
@@ -113,11 +112,10 @@ const UsuarioController = {
       return responsePopulated;
     },
     actualizarUsuario: async (_, { id, input }, { usuario }) => {
-      const { cliente } = await validarUsuario(usuario, "Administrador");
+      const { cliente } = await validarUsuario(usuario, "Any");
 
       let existeUsuario = await UsuarioModelo.exists({
         $and: [
-          { empresa: input.empresa },
           { cliente },
           { estatus: true },
           { _id: id },
