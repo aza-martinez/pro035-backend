@@ -3,6 +3,7 @@ const PeriodoEvaluacionModelo = require("./../models/PeriodoEvaluacionModelo");
 const validarUsuario = require("../helpers/validarUsuario");
 const UsuarioModelo = require("./../models/UsuarioModelo");
 const CentroTrabajoModelo = require("./../models/CentroTrabajoModelo");
+const EmpresaModelo = require('./../models/empresas');
 
 const PeriodoEvaluacionController = {
   Query: {
@@ -108,6 +109,10 @@ const PeriodoEvaluacionController = {
             path: "empleados",
             model: UsuarioModelo,
           },
+          {
+            path: "empresa",
+            model: EmpresaModelo,
+          },          
         ]
       );
 
