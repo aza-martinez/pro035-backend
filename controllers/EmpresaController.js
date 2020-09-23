@@ -42,7 +42,11 @@ const EmpresaController = {
       const { createReadStream } = await logo[0];
       const stream = createReadStream();
 
+      console.log(stream);
+
       const result = await cloudinary.uploader.upload(stream.path);
+      console.log(result)
+
       input.logo = result.secure_url;
       input.cliente = cliente;
       const empresaNueva = new EmpresaModelo(input);
