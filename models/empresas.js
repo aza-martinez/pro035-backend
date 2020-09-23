@@ -45,6 +45,18 @@ const EmpresasSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Cliente",
     },
+    logo: {
+      type: String,
+      trim: true,
+    },
+    giro: {
+      type: String,
+      trim: true,
+    },
+    principalesActividades: {
+      type: String,
+      trim: true,
+    },
   },
   { versionKey: false }
 );

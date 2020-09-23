@@ -6,7 +6,7 @@ const validarUsuario = require("./../helpers/validarUsuario");
 const PuestosController = {
   Query: {
     obtenerPuestos: async (_, { empresa }, { usuario }) => {
-      const { cliente } = await validarUsuario(usuario, "Administrador");
+      const { cliente } = await validarUsuario(usuario, "Any");
 
       const puestos = await PuestosModelo.find({
         $and: [{ cliente }, { empresa }, { estatus: true }],

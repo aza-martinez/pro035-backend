@@ -18,6 +18,9 @@ const typeDefs = gql`
     cp: String
     rfc: String
     cliente: Cliente
+    logo: String
+    giro: String
+    principalesActividades: String
   }
 
   type CentroTrabajo {
@@ -60,7 +63,8 @@ const typeDefs = gql`
     encuestasPendientes: [Int]
     puesto: Puesto
     centroTrabajo: ID
-    empresa: ID
+    empresa: Empresa
+    areaTrabajo: AreaTrabajo
   }
 
   type Token {
@@ -82,13 +86,24 @@ const typeDefs = gql`
     rangoEmpleados: String
     centroTrabajo: CentroTrabajo
     estatus: String
-    empleados: [Usuario]
+    empleados: [EmpleadosPeriodoEvaluacion]
     creado: String
     fechaPendiente: String
     fechaEnProceso: String
     fechaFinalizado: String
-    empresa: ID
+    empresa: Empresa
     encuestas: [Int]
+  }
+
+  type EmpleadosPeriodoEvaluacion {
+    id: ID
+    empleado: ID
+    encuestas: [EncuestasEmpleadoPE]
+  }
+
+  type EncuestasEmpleadoPE {
+    estatus: String
+    numeroGuia: String
   }
 
   type Encuesta {
@@ -144,21 +159,28 @@ const typeDefs = gql`
   type Mensaje {
     id: ID
     mensaje: String
+    plural: String
+    orden: String
   }
 
   type EncuestaContestada {
-    id: ID   
-    periodoEvaluacion: ID
+    id: ID
+    periodoEvaluacion: PeriodoEvaluacion
     ats: Boolean
+    requireAnalisis: Boolean
+    empleado: Usuario
+    numeroGuia: String
+    createdAt: String
     respuestas: [RespuestaEncuestaContestada]
   }
 
   type RespuestaEncuestaContestada {
-    categoria: ID
+    id: ID
+    categoria: Categoria
     dominio: ID
     dimension: ID
-    enumeracion: Int
-    pregunta: ID
+    enumeracion: Float
+    pregunta: Pregunta
     valorRespuesta: Int
     descripcionRespuesta: String
     respuesta: ID
@@ -186,6 +208,8 @@ const typeDefs = gql`
     cliente: ID
     empresa: ID
     centroTrabajo: ID
+    puesto: ID
+    areaTrabajo: ID
   }
 
   input AutenticarInput {
@@ -200,6 +224,8 @@ const typeDefs = gql`
     direccion: String!
     cp: String
     rfc: String!
+    giro: String
+    principalesActividades: String
   }
 
   input CentroTrabajoInput {
@@ -227,9 +253,19 @@ const typeDefs = gql`
     nombre: String!
     rangoEmpleados: String!
     centroTrabajo: ID!
-    empleados: [ID]!
+    empleados: [EmpleadosPeriodoEvaluacionInput]!
     empresa: ID!
     encuestas: [Int]
+  }
+
+  input EmpleadosPeriodoEvaluacionInput {
+    empleado: ID
+    encuestas: [EncuestasEmpleadoPEInput]
+  }
+
+  input EncuestasEmpleadoPEInput {
+    estatus: String
+    numeroGuia: String
   }
 
   input EncuestaContestadaInput {
@@ -243,13 +279,19 @@ const typeDefs = gql`
     categoria: ID
     dominio: ID
     dimension: ID
-    enumeracion: Int
+    enumeracion: Float
     pregunta: ID
     valorRespuesta: Int
     descripcionRespuesta: String
     respuesta: ID
   }
-  
+
+  input ReporteInput {
+    encuesta: String
+    periodoEvaluacion: ID
+    empleado: ID
+  }
+
   type Query {
     obtenerUsuarioPorId(id: ID!, empresa: ID!): Usuario
     obtenerUsuarioAutenticado: Usuario
@@ -259,18 +301,27 @@ const typeDefs = gql`
     obtenerCentrosTrabajo(empresa: ID!): [CentroTrabajo]
     obtenerAreasTrabajo(empresa: ID!): [AreaTrabajo]
     obtenerAreaTrabajo(id: ID!, empresa: ID!): AreaTrabajo
+    obtenerAreasTrabajoCentroTrabajo(centroTrabajo: ID!): [AreaTrabajo]
     obtenerPuestos(empresa: ID!): [Puesto]
     obtenerPuesto(id: ID!, empresa: ID!): Puesto
-    obtenerPeriodosEvaluacion(empresa: ID!): [PeriodoEvaluacion]
+    obtenerPeriodosEvaluacion(
+      empresa: ID
+      centroTrabajo: ID
+    ): [PeriodoEvaluacion]
+    obtenerEncuestasPendientesUsuario: [EncuestasEmpleadoPE]
     obtenerEncuestaPorNumeracion(numeroEncuesta: String!): Encuesta
     obtenerPreguntasPorEncuesta(numeroEncuesta: String!): [Pregunta]
     obtenerPeriodoEvaluacionPorUsuario: PeriodoEvaluacion
+    obtenerEncuestaContestadaPE(
+      periodoEvaluacion: ID
+      numeroGuia: String
+    ): [EncuestaContestada]
   }
 
   type Mutation {
     nuevoUsuario(input: UsuarioInput): Usuario
     actualizarUsuario(id: ID!, input: UsuarioInput): Usuario
-    agregarEmpresa(input: EmpresaInput): Empresa
+    agregarEmpresa(input: EmpresaInput, logo: Upload): Empresa
     agregarCentroTrabajo(input: CentroTrabajoInput): CentroTrabajo
     actualizarCentroTrabajo(id: ID!, input: CentroTrabajoInput): CentroTrabajo
     agregarAreaTrabajo(input: AreaTrabajoInput): AreaTrabajo
@@ -278,7 +329,11 @@ const typeDefs = gql`
     agregarPuesto(input: PuestoInput): Puesto
     actualizarPuesto(id: ID!, input: PuestoInput): Puesto
     registrarPeriodoEvaluacion(input: PeriodoEvaluacionInput): PeriodoEvaluacion
-    contestarEncuesta(input: EncuestaContestadaInput, numeroEncuesta: String) : EncuestaContestada
+    contestarEncuesta(
+      input: EncuestaContestadaInput
+      numeroEncuesta: String
+    ): EncuestaContestada
+    generarReportePorEmpleado(input: ReporteInput): EncuestaContestada
   }
 `;
 

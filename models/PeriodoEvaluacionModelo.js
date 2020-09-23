@@ -3,7 +3,16 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const PeriodoEvaluacionSchema = Schema(
+
+const EmpleadosPeriodoEvaluacion = new Schema({
+  empleado: {
+    type: Schema.ObjectId,
+    ref: 'Usuario'
+  },
+  encuestas: []
+})
+
+const PeriodoEvaluacionSchema = new Schema(
   {
     nombre: {
       type: String,
@@ -26,12 +35,7 @@ const PeriodoEvaluacionSchema = Schema(
       enum: ["Pendiente", "En proceso", "Finalizado"],
       default: "Pendiente",
     },
-    empleados: [
-      {
-        type: mongoose.Schema.ObjectId,
-        ref: "Usuario",
-      },
-    ],
+    empleados: [EmpleadosPeriodoEvaluacion],
     creado: {
       type: Date,
       default: Date.now(),

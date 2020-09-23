@@ -12,14 +12,7 @@ const validarUsuario = require("../helpers/validarUsuario");
 const PreguntaController = {
   Query: {
     obtenerPreguntasPorEncuesta: async (_, { numeroEncuesta }, { usuario }) => {
-      const { dataUsuario } = await validarUsuario(usuario, "Any");
-
-      const pendienteEncuesta = dataUsuario.encuestasPendientes.find(
-        (item) => item == numeroEncuesta
-      );
-
-      if (!pendienteEncuesta)
-        throw new Error("No se puede responder esta encuesta");
+      await validarUsuario(usuario, "Any");
 
       const preguntas = await PreguntaModelo.find({
         numeroGuia: numeroEncuesta.toString(),

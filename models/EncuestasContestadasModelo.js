@@ -1,8 +1,40 @@
 "use strict";
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const moment = require('moment-timezone');
 
-const EncuestaCSchema = Schema(
+function getDate() {
+  return moment().tz('America/Monterrey').toString();
+}
+
+const RespuestaEncuestaContestada = new Schema({
+    categoria: {
+      type: Schema.ObjectId,
+      ref: "Categorias"
+    },
+    dominio: {
+      type: Schema.ObjectId,
+      ref: 'Dominios'
+    },
+    dimension: {
+      type: Schema.ObjectId,
+      ref: 'Dimensiones'
+    },
+    pregunta: {
+      type: Schema.ObjectId,
+      ref: 'Preguntas'
+    },
+    respuesta: {
+      type: Schema.ObjectId,
+      ref: 'Respuestas'
+    },
+    valorRespuesta: Number,
+    enumeracion: Number,
+    descripcionRespuesta: String,
+});
+
+
+const EncuestaCSchema = new Schema(
   {
     numeroGuia: {
       type: String,
@@ -20,11 +52,21 @@ const EncuestaCSchema = Schema(
       type: Boolean,
     },
     requireAnalisis: {
-      type: Boolean
+      type: Boolean,
     },
-    respuestas: [],
+    respuestas: [RespuestaEncuestaContestada],
+    createdAt: {
+      type: Date,
+    },
+    updatedAt: Date
   },
-  { versionKey: false }
+  {
+    versionKey: false,
+    timestamps: {
+      currentTime: getDate
+    }
+  }
 );
+
 
 module.exports = mongoose.model("EncuestasContestadas", EncuestaCSchema);

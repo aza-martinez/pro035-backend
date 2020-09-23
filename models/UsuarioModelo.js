@@ -110,6 +110,10 @@ const UsuariosSchema = mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    areaTrabajo: {
+      type: mongoose.Schema.ObjectId,
+      ref: "AreasTrabajo",
+    },
   },
   { versionKey: false }
 );

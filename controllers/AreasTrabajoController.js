@@ -11,14 +11,16 @@ const AreaTrabajoController = {
 
       const areasTrabajo = await AreaTrabajoModelo.find({
         $and: [{ empresa }, { cliente }, { estatus: true }],
-      })
-        .populate([{
+      }).populate([
+        {
           path: "empresa",
           model: EmpresaModelo,
-        }, {
-          path: 'centrosTrabajo',
-          model: CentroTrabajoModelo
-        }])
+        },
+        {
+          path: "centrosTrabajo",
+          model: CentroTrabajoModelo,
+        },
+      ]);
 
       if (!areasTrabajo) throw new Error("No se pudo obtener areas de trabajo");
 
@@ -29,17 +31,58 @@ const AreaTrabajoController = {
 
       const areaTrabajo = await AreaTrabajoModelo.findOne({
         $and: [{ empresa }, { _id: id }, { cliente }, { estatus: true }],
-      }).populate([{
-        path: "empresa",
-        model: EmpresaModelo,
-      }, {
-        path: 'centrosTrabajo',
-        model: CentroTrabajoModelo
-      }]);
+      }).populate([
+        {
+          path: "empresa",
+          model: EmpresaModelo,
+        },
+        {
+          path: "centrosTrabajo",
+          model: CentroTrabajoModelo,
+        },
+      ]);
 
       if (!areaTrabajo) throw new Error("Area trabajo no existe.");
 
       return areaTrabajo;
+    },
+    obtenerAreasTrabajoCentroTrabajo: async (
+      _,
+      { centroTrabajo },
+      { usuario }
+    ) => {
+      const { cliente } = await validarUsuario(usuario, "Any");
+
+      const existeCentroTrabajo = await CentroTrabajoModelo.exists({
+        $and: [{ cliente }, { _id: centroTrabajo }],
+      });
+
+      if (!existeCentroTrabajo)
+        throw new Error(
+          "No se encontraron resultados por el centro trabajo asignado"
+        );
+
+      const areasTrabajo = await AreaTrabajoModelo.find({
+        $and: [
+          { centrosTrabajo: { $in: [centroTrabajo] } },
+          { cliente },
+          { estatus: true },
+        ],
+      }).populate([
+        {
+          path: "empresa",
+          model: EmpresaModelo,
+        },
+        {
+          path: "centrosTrabajo",
+          model: CentroTrabajoModelo,
+        },
+      ]);
+
+      if (!areasTrabajo)
+        throw new Error("No se encontraron resultados de areas de trabajo");
+
+      return areasTrabajo;
     },
   },
   Mutation: {
@@ -68,13 +111,16 @@ const AreaTrabajoController = {
       const areaTrabajoNueva = new AreaTrabajoModelo(input);
       const response = await areaTrabajoNueva.save();
 
-      const responsePopulated = await AreaTrabajoModelo.populate(response, [{
-        path: "empresa",
-        model: EmpresaModelo,
-      }, {
-        path: 'centrosTrabajo',
-        model: CentroTrabajoModelo
-      }]);
+      const responsePopulated = await AreaTrabajoModelo.populate(response, [
+        {
+          path: "empresa",
+          model: EmpresaModelo,
+        },
+        {
+          path: "centrosTrabajo",
+          model: CentroTrabajoModelo,
+        },
+      ]);
 
       return responsePopulated;
     },
@@ -114,13 +160,16 @@ const AreaTrabajoController = {
       // VALIDAR SI SE ACTUALIZÓ REGISTRO
       if (!response) throw new Error("No se pudo actualizar area de trabajo");
 
-      const responsePopulated = await AreaTrabajoModelo.populate(response, [{
-        path: "empresa",
-        model: EmpresaModelo,
-      }, {
-        path: 'centrosTrabajo',
-        model: CentroTrabajoModelo
-      }]);
+      const responsePopulated = await AreaTrabajoModelo.populate(response, [
+        {
+          path: "empresa",
+          model: EmpresaModelo,
+        },
+        {
+          path: "centrosTrabajo",
+          model: CentroTrabajoModelo,
+        },
+      ]);
 
       // RETORNAR REGISTRO
       return responsePopulated;

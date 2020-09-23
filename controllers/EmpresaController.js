@@ -1,4 +1,5 @@
 require("dotenv").config({ path: "variables.env" });
+const cloudinary = require("./../helpers/cloudinary");
 const EmpresaModelo = require("../models/empresas");
 const ClienteModelo = require("../models/clientes");
 const validarUsuario = require("./../helpers/validarUsuario");
@@ -21,9 +22,8 @@ const EmpresaController = {
     },
   },
   Mutation: {
-    agregarEmpresa: async (_, { input }, { usuario }) => {
+    agregarEmpresa: async (_, { input, logo }, { usuario }) => {
       const { cliente } = await validarUsuario(usuario, "Administrador");
-
       const existeEmpresa = await EmpresaModelo.findOne({
         $and: [
           {
@@ -38,6 +38,12 @@ const EmpresaController = {
       if (existeEmpresa)
         throw new Error("Empresa ya existe, favor intente con otros datos");
 
+      console.log(logo)
+      const { createReadStream } = await logo[0];
+      const stream = createReadStream();
+
+      const result = await cloudinary.uploader.upload(stream.path);
+      input.logo = result.secure_url;
       input.cliente = cliente;
       const empresaNueva = new EmpresaModelo(input);
       const response = await empresaNueva.save();

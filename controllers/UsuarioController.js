@@ -4,11 +4,13 @@ const UsuarioModelo = require("../models/UsuarioModelo");
 const validarUsuario = require("../helpers/validarUsuario");
 const CentroTrabajoModelo = require("./../models/CentroTrabajoModelo");
 const PuestosModelo = require("./../models/PuestosModelo");
+const EmpresaModelo = require("./../models/empresas");
+const AreaTrabajoModelo = require("../models/AreaTrabajoModelo");
 
 const UsuarioController = {
   Query: {
     obtenerUsuarios: async (_, { empresa }, { usuario }) => {
-      const { cliente } =  await validarUsuario(usuario, "Administrador");
+      const { cliente } = await validarUsuario(usuario, "Administrador");
 
       const usuarios = await UsuarioModelo.find({
         $and: [
@@ -44,7 +46,20 @@ const UsuarioController = {
 
       const usuarioAutenticado = await UsuarioModelo.findOne({
         $or: [{ email: user }, { usuario: user }],
-      });
+      }).populate([
+        {
+          path: "empresa",
+          model: EmpresaModelo,
+        },
+        {
+          path: "puesto",
+          model: PuestosModelo,
+        },
+        {
+          path: "areaTrabajo",
+          model: AreaTrabajoModelo,
+        },
+      ]);
 
       if (!usuarioAutenticado)
         throw new Error("No se ha podido obtener al usuario");
@@ -115,11 +130,7 @@ const UsuarioController = {
       const { cliente } = await validarUsuario(usuario, "Any");
 
       let existeUsuario = await UsuarioModelo.exists({
-        $and: [
-          { cliente },
-          { estatus: true },
-          { _id: id },
-        ],
+        $and: [{ cliente }, { estatus: true }, { _id: id }],
       });
 
       if (!existeUsuario)

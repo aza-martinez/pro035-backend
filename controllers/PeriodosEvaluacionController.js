@@ -6,15 +6,23 @@ const CentroTrabajoModelo = require("./../models/CentroTrabajoModelo");
 
 const PeriodoEvaluacionController = {
   Query: {
-    obtenerPeriodosEvaluacion: async (_, { empresa }, { usuario }) => {
+    obtenerPeriodosEvaluacion: async (
+      _,
+      { empresa, centroTrabajo },
+      { usuario }
+    ) => {
       const { cliente } = await validarUsuario(usuario, "Administrador");
 
       const periodosEvaluacion = await PeriodoEvaluacionModelo.find({
-        $and: [{ cliente }, { empresa }],
+        $and: [{ cliente }, { $or: [{ empresa }, { centroTrabajo }] }],
       }).populate([
         {
           path: "centroTrabajo",
           model: CentroTrabajoModelo,
+        },
+        {
+          path: "empleados",
+          model: UsuarioModelo,
         },
       ]);
 
@@ -25,17 +33,43 @@ const PeriodoEvaluacionController = {
     },
     obtenerPeriodoEvaluacionPorUsuario: async (_, __, { usuario }) => {
       const { cliente, dataUsuario } = await validarUsuario(usuario, "Any");
-
-      //
+      
       const periodoEvaluacion = await PeriodoEvaluacionModelo.findOne({
         $and: [
-          { empleados: { $eq: dataUsuario._id } },
+          { "empleados.empleado": { $eq: dataUsuario._id } },
           { estatus: "Pendiente" },
           { cliente },
         ],
       });
 
       return periodoEvaluacion;
+    },
+    obtenerEncuestasPendientesUsuario: async (_, __, { usuario }) => {
+      const { cliente, dataUsuario } = await validarUsuario(usuario, "Any");
+
+      const periodoEvaluacion = await PeriodoEvaluacionModelo.findOne(
+        {
+          $and: [
+            { cliente },
+            { estatus: "Pendiente" },
+            { "empleados.empleado": dataUsuario._id },
+          ],
+        },
+        { empleados: 1, _id: 0 }
+      );
+
+      if (!periodoEvaluacion)
+        throw new Error("No se encontraron encuestas pendientes");
+
+      const empleado = periodoEvaluacion.empleados.find(
+        (empleado) => empleado.empleado == dataUsuario._id.toString()
+      );
+
+      const encuestas = empleado.encuestas.filter(
+        ({ estatus }) => estatus == "Pendiente"
+      );
+
+      return encuestas;
     },
   },
   Mutation: {
@@ -56,22 +90,9 @@ const PeriodoEvaluacionController = {
         );
 
       input.cliente = cliente;
-      
+
       const periodoEvaluacion = new PeriodoEvaluacionModelo(input);
-
       let response = periodoEvaluacion.save();
-
-      for await (const empleado of input.empleados) {
-        const usuarioActualizado = await UsuarioModelo.findByIdAndUpdate(
-          empleado,
-          { encuestasPendientes: input.encuestas }
-        );
-
-        if (!usuarioActualizado)
-          throw new Error(
-            `No se ha podido asignar encuestas a Usuario ${empleado}`
-          );
-      }
 
       if (!response)
         throw new Error("Ha ocurrido un error al registrar Período Evaluación");

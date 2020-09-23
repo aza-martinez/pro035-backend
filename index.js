@@ -5,6 +5,7 @@ const typeDefs = require("./graphql/schema");
 const resolvers = require("./graphql/resolvers");
 const conectarDB = require("./helpers/mongo");
 const { initAuth0 } = require("@auth0/nextjs-auth0");
+const moment = require("moment-timezone");
 
 conectarDB();
 
@@ -23,6 +24,7 @@ const auth0 = initAuth0({
       "z3wdGc2QPktdqfKH5okjqUcanPNC8mgHdkdsKxLnkKq6CLNRPfpDRjeDdbobra9AF9arZNMPAvLB2Y7xxUUuQN8aKT93653UjYj9yCrjPrMHBR8c9vnQgixj8CanjCwn",
     // The cookie lifetime (expiration) in seconds. Set to 8 hours by default.
     cookieLifetime: 60 * 60 * 8,
+    cookieDomain: ".pro035.com",
     // (Optional) SameSite configuration for the session cookie. Defaults to 'lax', but can be changed to 'strict' or 'none'. Set it to false if you want to disable the SameSite setting.
     cookieSameSite: "lax",
     // (Optional) Store the id_token in the session. Defaults to false.
@@ -43,7 +45,7 @@ const auth0 = initAuth0({
 // SERVIDOR
 const server = new ApolloServer({
   cors: {
-    origin: "https://portal.pro035.com",
+    origin: "https://portal.pro035",
     methods: "POST, GET, OPTIONS",
     optionsSuccessStatus: 200,
     credentials: true,
@@ -60,6 +62,9 @@ const server = new ApolloServer({
 
 server.listen({ port: process.env.PORT || 4000 }).then(({ url }) => {
   console.log(`SERVIDOR LISTO EN LA URL: ${url}`);
+  const date = moment().tz("America/Monterrey").toString();
+
+  console.log(date);
 });
 
 module.exports = server;
