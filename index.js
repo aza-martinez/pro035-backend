@@ -44,7 +44,7 @@ const auth0 = initAuth0({
 // SERVIDOR
 const server = new ApolloServer({
   cors: {
-    origin: "https://portal.pro035",
+    origin: "https://portal.pro035.com",
     methods: "POST, GET, OPTIONS",
     optionsSuccessStatus: 200,
     credentials: true,
