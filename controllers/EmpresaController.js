@@ -38,14 +38,21 @@ const EmpresaController = {
       if (existeEmpresa)
         throw new Error("Empresa ya existe, favor intente con otros datos");
 
-      console.log(logo)
+      console.log(logo);
       const { createReadStream } = await logo[0];
       const stream = createReadStream();
 
-      console.log(stream);
+      const result = await new Promise((resolve, reject) => {
+        createReadStream().pipe(
+          cloudinary.uploader.upload_stream((error, result) => {
+            if (error) reject(error);
 
-      const result = await cloudinary.uploader.upload(stream.path);
-      console.log(result)
+            resolve(result);
+          })
+        );
+      });
+
+      console.log(result);
 
       input.logo = result.secure_url;
       input.cliente = cliente;
