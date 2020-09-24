@@ -94,24 +94,9 @@ const EncuestasContestadasController = {
         },
         {
           arrayFilters: [
-            { "perf.emplado": input.empleado },
+            { "empl.emplado": input.empleado },
             { "enc.numeroGuia": numeroEncuesta}
           ]
-        }
-      );
-
-      db.collection.update(
-        { _id: { $eq: ObjectId("5c3d2b3502d0a9467037ede5") } },
-        {
-          $set: {
-            "perfiles.$[perf].estudios.$[est].institucion": "Escola Poblenou",
-          },
-        },
-        {
-          arrayFilters: [
-            { "perf._id": { $eq: ObjectId("5c3d2b4702d0a9467037ede7") } },
-            { "est._id": { $eq: ObjectId("5c5110da02d0a90ba0926731") } },
-          ],
         }
       );
 
