@@ -98,21 +98,23 @@ const PeriodoEvaluacionController = {
       if (!response)
         throw new Error("Ha ocurrido un error al registrar Período Evaluación");
 
-      const responsePopulated = (await response).populate([
-        {
-          path: "centroTrabajo",
-          model: CentroTrabajoModelo,
-        },
-        {
-          path: "empleados",
-          model: UsuarioModelo,
-        },
-        {
-          path: "empresa",
-          model: EmpresaModelo,
-        },
-      ]);
-      
+      const responsePopulated = (await response)
+        .populate([
+          {
+            path: "centroTrabajo",
+            model: CentroTrabajoModelo,
+          },
+          {
+            path: "empleados",
+            model: UsuarioModelo,
+          },
+          {
+            path: "empresa",
+            model: EmpresaModelo,
+          },
+        ])
+        .execPopulate();
+
       console.log(responsePopulated);
 
       return responsePopulated;
