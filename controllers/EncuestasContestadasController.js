@@ -8,7 +8,7 @@ const PreguntaModelo = require("./../models/PreguntasModelo");
 const EmpresaModelo = require("./../models/empresas");
 const PuestoModelo = require("./../models/PuestosModelo");
 const AreaTrabajoModelo = require("../models/AreaTrabajoModelo");
-const MensajeModelo = require('./../models/mensajes');
+const MensajeModelo = require("./../models/mensajes");
 
 const EncuestasContestadasController = {
   Query: {
@@ -52,9 +52,9 @@ const EncuestasContestadasController = {
           path: "respuestas.pregunta",
           model: PreguntaModelo,
           populate: {
-            path: 'mensaje',
-            model: MensajeModelo
-          }
+            path: "mensaje",
+            model: MensajeModelo,
+          },
         },
       ]);
 
@@ -68,7 +68,7 @@ const EncuestasContestadasController = {
     contestarEncuesta: async (_, { input, numeroEncuesta }, { usuario }) => {
       const { cliente, dataUsuario } = await validarUsuario(usuario, "Any");
 
-      const periodoEvaluacion = await PeriodoEvaluacionModelo.findOne({
+      const periodoEvaluacion = await PeriodoEvaluacionModelo.exists({
         _id: input.periodoEvaluacion,
       });
 
@@ -85,18 +85,18 @@ const EncuestasContestadasController = {
       if (!EncuestaNueva) throw new Error("No se ha podido registrar encuesta");
 
       // TODO: ELIMINAR ENCUESTA PENDIENTE DE USUARIO
-      const empleadoIndex = periodoEvaluacion.empleados.findIndex(
-        ({ empleado }) => empleado == dataUsuario.id
+      const updated = await PeriodoEvaluacionModelo.findOneAndUpdate(
+        {
+          _id: input.periodoEvaluacion,
+          "empleados.$.empleado": input.empleado,
+          "empleados.$.encuestas.$.numeroGuia:": numeroEncuesta,
+        },
+        {
+          $set: {
+            "empleados.$.encuestas.$.estatus": "Contestada",
+          },
+        }
       );
-      const encuestaIndex = periodoEvaluacion.empleados[
-        empleadoIndex
-      ].encuestas.findIndex(({ numeroGuia }) => numeroGuia == input.numeroGuia);
-
-      periodoEvaluacion.empleados[empleadoIndex].encuestas[
-        encuestaIndex
-      ].estatus = "Contestada";
-
-      await PeriodoEvaluacionModelo.updateOne(periodoEvaluacion);
 
       return EncuestaNueva;
     },
