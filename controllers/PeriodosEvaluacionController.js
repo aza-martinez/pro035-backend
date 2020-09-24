@@ -98,7 +98,7 @@ const PeriodoEvaluacionController = {
       if (!response)
         throw new Error("Ha ocurrido un error al registrar Período Evaluación");
 
-      const responsePopulated = await response
+      const responsePopulated = await periodoEvaluacion
         .populate([
           {
             path: "centroTrabajo",
