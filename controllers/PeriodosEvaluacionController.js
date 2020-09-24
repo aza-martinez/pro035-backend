@@ -3,7 +3,7 @@ const PeriodoEvaluacionModelo = require("./../models/PeriodoEvaluacionModelo");
 const validarUsuario = require("../helpers/validarUsuario");
 const UsuarioModelo = require("./../models/UsuarioModelo");
 const CentroTrabajoModelo = require("./../models/CentroTrabajoModelo");
-const EmpresaModelo = require('./../models/empresas');
+const EmpresaModelo = require("./../models/empresas");
 
 const PeriodoEvaluacionController = {
   Query: {
@@ -34,7 +34,7 @@ const PeriodoEvaluacionController = {
     },
     obtenerPeriodoEvaluacionPorUsuario: async (_, __, { usuario }) => {
       const { cliente, dataUsuario } = await validarUsuario(usuario, "Any");
-      
+
       const periodoEvaluacion = await PeriodoEvaluacionModelo.findOne({
         $and: [
           { "empleados.empleado": { $eq: dataUsuario._id } },
@@ -98,24 +98,21 @@ const PeriodoEvaluacionController = {
       if (!response)
         throw new Error("Ha ocurrido un error al registrar Período Evaluación");
 
-      const responsePopulated = await PeriodoEvaluacionModelo.populate(
-        response,
-        [
-          {
-            path: "centroTrabajo",
-            model: CentroTrabajoModelo,
-          },
-          {
-            path: "empleados",
-            model: UsuarioModelo,
-          },
-          {
-            path: "empresa",
-            model: EmpresaModelo,
-          },          
-        ]
-      );
-
+      const responsePopulated = (await response).populate([
+        {
+          path: "centroTrabajo",
+          model: CentroTrabajoModelo,
+        },
+        {
+          path: "empleados",
+          model: UsuarioModelo,
+        },
+        {
+          path: "empresa",
+          model: EmpresaModelo,
+        },
+      ]);
+      
       console.log(responsePopulated);
 
       return responsePopulated;
