@@ -94,7 +94,7 @@ const EncuestasContestadasController = {
         },
         {
           arrayFilters: [
-            { "empl.emplado": input.empleado },
+            { "empl.empleado": input.empleado },
             { "enc.numeroGuia": numeroEncuesta}
           ]
         }
