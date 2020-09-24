@@ -85,16 +85,33 @@ const EncuestasContestadasController = {
       if (!EncuestaNueva) throw new Error("No se ha podido registrar encuesta");
 
       // TODO: ELIMINAR ENCUESTA PENDIENTE DE USUARIO
-      const updated = await PeriodoEvaluacionModelo.findOneAndUpdate(
-        {
-          _id: input.periodoEvaluacion,
-          "empleados.$.empleado": input.empleado,
-          "empleados.$.encuestas.$.numeroGuia:": numeroEncuesta,
-        },
+      const updated = await PeriodoEvaluacionModelo.update(
+        { _id: input.periodoEvaluacion },
         {
           $set: {
-            "empleados.$.encuestas.$.estatus": "Contestada",
+            "empleados.$[empl].encuestas.$[enc].estatus": "Contestada",
           },
+        },
+        {
+          arrayFilters: [
+            { "perf.emplado": input.empleado },
+            { "enc.numeroGuia": numeroEncuesta}
+          ]
+        }
+      );
+
+      db.collection.update(
+        { _id: { $eq: ObjectId("5c3d2b3502d0a9467037ede5") } },
+        {
+          $set: {
+            "perfiles.$[perf].estudios.$[est].institucion": "Escola Poblenou",
+          },
+        },
+        {
+          arrayFilters: [
+            { "perf._id": { $eq: ObjectId("5c3d2b4702d0a9467037ede7") } },
+            { "est._id": { $eq: ObjectId("5c5110da02d0a90ba0926731") } },
+          ],
         }
       );
 
