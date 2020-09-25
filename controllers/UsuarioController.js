@@ -31,10 +31,16 @@ const UsuarioController = {
 
       const empleado = await UsuarioModelo.findOne({
         $and: [{ cliente }, { empresa }, { estatus: true }, { _id: id }],
-      }).populate({
-        path: "puesto",
-        model: PuestosModelo,
-      });
+      }).populate([
+        {
+          path: "puesto",
+          model: PuestosModelo,
+        },
+        {
+          path: 'empresa',
+          model: EmpresaModelo
+        }
+      ]);
 
       if (!empleado)
         throw new Error("No existe el usuario que intenta obtener.");

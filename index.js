@@ -1,5 +1,6 @@
 "use strict";
 
+require("dotenv").config({ path: "variables.env" });
 const { ApolloServer } = require("apollo-server");
 const typeDefs = require("./graphql/schema");
 const resolvers = require("./graphql/resolvers");
@@ -44,7 +45,7 @@ const auth0 = initAuth0({
 // SERVIDOR
 const server = new ApolloServer({
   cors: {
-    origin: "https://portal.pro035.com",
+    origin: process.env.DOMAIN_CORS_ORIGIN || "http://localhost:3000",
     methods: "POST, GET, OPTIONS",
     optionsSuccessStatus: 200,
     credentials: true,

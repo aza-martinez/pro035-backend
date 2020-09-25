@@ -84,7 +84,6 @@ const EncuestasContestadasController = {
 
       if (!EncuestaNueva) throw new Error("No se ha podido registrar encuesta");
 
-      // TODO: ELIMINAR ENCUESTA PENDIENTE DE USUARIO
       const updated = await PeriodoEvaluacionModelo.update(
         { _id: input.periodoEvaluacion },
         {
