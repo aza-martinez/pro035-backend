@@ -7,8 +7,8 @@ const DominioModelo = require("../models/DominioModelo");
 const DimensionModelo = require("./../models/DimensionModelo");
 const PreguntaModelo = require("./../models/PreguntasModelo");
 const RespuestasModelo = require("./../models/RespuestasModelo");
+const PeriodoEvaluacionModelo = require('./../models/PeriodoEvaluacionModelo');
 const validarUsuario = require("./../helpers/validarUsuario");
-
 const EncuestaController = {
   Query: {
     obtenerEncuestaPorNumeracion: async (

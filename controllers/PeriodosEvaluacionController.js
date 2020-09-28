@@ -1,4 +1,3 @@
-require("dotenv").config({ path: "variables.env" });
 const PeriodoEvaluacionModelo = require("./../models/PeriodoEvaluacionModelo");
 const validarUsuario = require("../helpers/validarUsuario");
 const UsuarioModelo = require("./../models/UsuarioModelo");
