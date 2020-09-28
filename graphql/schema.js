@@ -97,7 +97,7 @@ const typeDefs = gql`
 
   type EmpleadosPeriodoEvaluacion {
     id: ID
-    empleado: ID
+    empleado: Usuario
     encuestas: [EncuestasEmpleadoPE]
   }
 

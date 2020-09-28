@@ -24,6 +24,7 @@ const EmpresaController = {
   Mutation: {
     agregarEmpresa: async (_, { input, logo }, { usuario }) => {
       const { cliente } = await validarUsuario(usuario, "Administrador");
+
       const existeEmpresa = await EmpresaModelo.findOne({
         $and: [
           {
@@ -38,17 +39,20 @@ const EmpresaController = {
       if (existeEmpresa)
         throw new Error("Empresa ya existe, favor intente con otros datos");
 
-      console.log(logo);
       const { createReadStream } = await logo[0];
-      const stream = createReadStream();
 
       const result = await new Promise((resolve, reject) => {
         createReadStream().pipe(
-          cloudinary.uploader.upload_stream((error, result) => {
-            if (error) reject(error);
+          cloudinary.uploader.upload_stream(
+            {
+              folder: "/pro035/logos-empresas/",
+            },
+            (error, result) => {
+              if (error) reject(error);
 
-            resolve(result);
-          })
+              resolve(result);
+            }
+          )
         );
       });
 

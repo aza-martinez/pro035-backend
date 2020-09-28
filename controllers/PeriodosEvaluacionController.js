@@ -22,7 +22,7 @@ const PeriodoEvaluacionController = {
           model: CentroTrabajoModelo,
         },
         {
-          path: "empleados",
+          path: "empleados.empleado",
           model: UsuarioModelo,
         },
       ]);
@@ -44,33 +44,6 @@ const PeriodoEvaluacionController = {
       });
 
       return periodoEvaluacion;
-    },
-    obtenerEncuestasPendientesUsuario: async (_, __, { usuario }) => {
-      const { cliente, dataUsuario } = await validarUsuario(usuario, "Any");
-
-      const periodoEvaluacion = await PeriodoEvaluacionModelo.findOne(
-        {
-          $and: [
-            { cliente },
-            { estatus: "Pendiente" },
-            { "empleados.empleado": dataUsuario._id },
-          ],
-        },
-        { empleados: 1, _id: 0 }
-      );
-
-      if (!periodoEvaluacion)
-        throw new Error("No se encontraron encuestas pendientes");
-
-      const empleado = periodoEvaluacion.empleados.find(
-        (empleado) => empleado.empleado == dataUsuario._id.toString()
-      );
-
-      const encuestas = empleado.encuestas.filter(
-        ({ estatus }) => estatus == "Pendiente"
-      );
-
-      return encuestas;
     },
   },
   Mutation: {
