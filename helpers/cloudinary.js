@@ -1,4 +1,4 @@
-require("dotenv").config({ path: "variables.env" });
+require("dotenv").config();
 const cloudinary = require("cloudinary").v2;
 
 cloudinary.config({

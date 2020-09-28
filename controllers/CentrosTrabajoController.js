@@ -1,5 +1,5 @@
 "use strict";
-require("dotenv").config({ path: "variables.env" });
+
 const CentroTrabajoModelo = require("../models/CentroTrabajoModelo");
 const validarUsuario = require("./../helpers/validarUsuario");
 

@@ -1,4 +1,4 @@
-require("dotenv").config({ path: "variables.env" });
+
 const cloudinary = require("./../helpers/cloudinary");
 const EmpresaModelo = require("../models/empresas");
 const ClienteModelo = require("../models/clientes");

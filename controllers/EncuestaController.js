@@ -1,5 +1,4 @@
 "use strict";
-require("dotenv").config({ path: "variables.env" });
 
 const EncuestaModelo = require("./../models/EncuestaModelo");
 const CategoriaModelo = require("../models/CategoriaModelo");

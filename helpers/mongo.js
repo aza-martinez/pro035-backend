@@ -1,7 +1,7 @@
 "use strict";
 
 const mongoose = require("mongoose");
-require('dotenv').config({ path: 'variables.env' });
+require('dotenv').config();
 process.setMaxListeners(0);
 
 const conectarDB = async () => {

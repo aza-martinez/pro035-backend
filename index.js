@@ -1,6 +1,6 @@
 "use strict";
 
-require("dotenv").config({ path: "variables.env" });
+require("dotenv").config();
 const { ApolloServer } = require("apollo-server");
 const typeDefs = require("./graphql/schema");
 const resolvers = require("./graphql/resolvers");
@@ -11,14 +11,13 @@ const moment = require("moment-timezone");
 conectarDB();
 
 const auth0 = initAuth0({
-  domain: "pro035.us.auth0.com",
-  clientId: "sEM1bxf4kK4Lt6srassoci9UT8sEeeYq",
-  clientSecret:
-    "X3nEk2NO2lYUBLkgu2v1r_8uatuH-eqESKRP-Q04Qhptvk445mlH3ZaZdNIxjpaf",
+  domain: process.env.AUTH0_DOMAIN,
+  clientId: process.env.AUTH0_CLIENT_ID,
+  clientSecret: process.env.AUTH0_CLIENT_SECRET,
   scope: "openid profile",
-  audience: "https://Pro035",
-  redirectUri: "https://portal.pro035.com/api/callback",
-  postLogoutRedirectUri: "https://portal.pro035.com",
+  audience: process.env.AUTH0_AUDIENCE,
+  redirectUri: process.env.AUTH0_REDIRECT_URI,
+  postLogoutRedirectUri: process.env.AUTH0_POST_LOGOUT_REDIRECT_URI,
   session: {
     // The secret used to encrypt the cookie.
     cookieSecret:

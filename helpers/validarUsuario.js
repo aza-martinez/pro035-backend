@@ -1,12 +1,12 @@
 "use strict";
 
-require("dotenv").config({ path: "variables.env" });
+require("dotenv").config();
 const UsuarioModelo = require("./../models/UsuarioModelo");
 
 const validarUsuario = async (usuario, perfil) => {
   if (!usuario) throw new Error("Credenciales no válidas");
 
-  const user_metadata = usuario.user[process.env.JWT_USER_METADATA];
+  const user_metadata = usuario.user[process.env.AUTH0_PAYLOAD_METADATA];
 
   const existeUsuario = await UsuarioModelo.findOne({
     $or: [{ email: user_metadata.user }, { usuario: user_metadata.user }],
