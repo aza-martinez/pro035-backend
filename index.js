@@ -20,8 +20,7 @@ const auth0 = initAuth0({
   postLogoutRedirectUri: process.env.AUTH0_POST_LOGOUT_REDIRECT_URI,
   session: {
     // The secret used to encrypt the cookie.
-    cookieSecret:
-      "z3wdGc2QPktdqfKH5okjqUcanPNC8mgHdkdsKxLnkKq6CLNRPfpDRjeDdbobra9AF9arZNMPAvLB2Y7xxUUuQN8aKT93653UjYj9yCrjPrMHBR8c9vnQgixj8CanjCwn",
+    cookieSecret: process.env.AUTH0_SESSION_COOKIE_SECRET,
     // The cookie lifetime (expiration) in seconds. Set to 8 hours by default.
     cookieLifetime: 60 * 60 * 8,
     // (Optional) SameSite configuration for the session cookie. Defaults to 'lax', but can be changed to 'strict' or 'none'. Set it to false if you want to disable the SameSite setting.

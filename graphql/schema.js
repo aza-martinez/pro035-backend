@@ -62,7 +62,7 @@ const typeDefs = gql`
     cliente: ID
     encuestasPendientes: [Int]
     puesto: Puesto
-    centroTrabajo: ID
+    centroTrabajo: CentroTrabajo
     empresa: Empresa
     areaTrabajo: AreaTrabajo
   }
@@ -308,14 +308,16 @@ const typeDefs = gql`
       empresa: ID
       centroTrabajo: ID
     ): [PeriodoEvaluacion]
+    obtenerPeriodoEvaluacion(id: ID): PeriodoEvaluacion
     obtenerEncuestasPendientesUsuario: [EncuestasEmpleadoPE]
     obtenerEncuestaPorNumeracion(numeroEncuesta: String!): Encuesta
     obtenerPreguntasPorEncuesta(numeroEncuesta: String!): [Pregunta]
     obtenerPeriodoEvaluacionPorUsuario: PeriodoEvaluacion
-    obtenerEncuestaContestadaPE(
+    obtenerEncuestasContestadaPE(
       periodoEvaluacion: ID
       numeroGuia: String
     ): [EncuestaContestada]
+    obtenerEncuestaContestadaEmpleado(input: ReporteInput): EncuestaContestada
   }
 
   type Mutation {

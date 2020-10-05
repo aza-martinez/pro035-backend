@@ -9,10 +9,11 @@ const EmpresaModelo = require("./../models/empresas");
 const PuestoModelo = require("./../models/PuestosModelo");
 const AreaTrabajoModelo = require("../models/AreaTrabajoModelo");
 const MensajeModelo = require("./../models/mensajes");
+const CentroTrabajoModelo = require("../models/CentroTrabajoModelo");
 
 const EncuestasContestadasController = {
   Query: {
-    obtenerEncuestaContestadaPE: async (
+    obtenerEncuestasContestadaPE: async (
       _,
       { periodoEvaluacion, numeroGuia },
       { usuario }
@@ -33,6 +34,10 @@ const EncuestasContestadasController = {
             {
               path: "areaTrabajo",
               model: AreaTrabajoModelo,
+            },
+            {
+              path: "centroTrabajo",
+              model: CentroTrabajoModelo,
             },
           ],
         },
@@ -60,6 +65,58 @@ const EncuestasContestadasController = {
 
       if (!encuestaContestada)
         throw new Error("No se han encontrado resultados");
+
+      return encuestaContestada;
+    },
+    obtenerEncuestaContestadaEmpleado: async (_, { input }, { usuario }) => {
+      await validarUsuario(usuario, "Administrador");
+      const { encuesta, periodoEvaluacion, empleado } = input;
+
+      const encuestaContestada = await EncuestasContestadasModelo.findOne({
+        $and: [{ periodoEvaluacion }, { empleado }, { numeroGuia: encuesta }],
+      }).populate([
+        {
+          path: "empleado",
+          model: UsuarioModelo,
+          populate: [
+            {
+              path: "puesto",
+              model: PuestoModelo,
+            },
+            {
+              path: "areaTrabajo",
+              model: AreaTrabajoModelo,
+            },
+            {
+              path: "centroTrabajo",
+              model: CentroTrabajoModelo,
+            },
+          ],
+        },
+        {
+          path: "respuestas.categoria",
+          model: CategoriaModelo,
+        },
+        {
+          path: "periodoEvaluacion",
+          model: PeriodoEvaluacionModelo,
+          populate: {
+            path: "empresa",
+            model: EmpresaModelo,
+          },
+        },
+        {
+          path: "respuestas.pregunta",
+          model: PreguntaModelo,
+          populate: {
+            path: "mensaje",
+            model: MensajeModelo,
+          },
+        },
+      ]);
+
+      if (!encuestaContestada)
+        throw new Error("No se ha podido generar el reporte.");
 
       return encuestaContestada;
     },
@@ -94,30 +151,12 @@ const EncuestasContestadasController = {
         {
           arrayFilters: [
             { "empl.empleado": input.empleado },
-            { "enc.numeroGuia": numeroEncuesta}
-          ]
+            { "enc.numeroGuia": numeroEncuesta },
+          ],
         }
       );
 
       return EncuestaNueva;
-    },
-    generarReportePorEmpleado: async (_, { input }, { usuario }) => {
-      const { cliente } = await validarUsuario(usuario, "Administrador");
-      const { encuesta, periodoEvaluacion, empleado } = input;
-
-      const encuestaContestada = await EncuestasContestadasModelo.findOne({
-        $and: [{ periodoEvaluacion }, { empleado }, { numeroGuia: encuesta }],
-      }).populate([
-        {
-          path: "empleado",
-          model: UsuarioModelo,
-        },
-      ]);
-
-      if (!encuestaContestada)
-        throw new Error("No se ha podido generar el reporte.");
-
-      return encuestaContestada;
     },
   },
 };

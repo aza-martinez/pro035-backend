@@ -31,6 +31,27 @@ const PeriodoEvaluacionController = {
 
       return periodosEvaluacion;
     },
+    obtenerPeriodoEvaluacion: async (_, { id }, { usuario }) => {
+      const { cliente } = await validarUsuario(usuario, "Administrador");
+
+      const periodoEvaluacion = await PeriodoEvaluacionModelo.findOne({
+        $and: [{ cliente }, { _id: id }],
+      }).populate([
+        {
+          path: "centroTrabajo",
+          model: CentroTrabajoModelo,
+        },
+        {
+          path: "empleados.empleado",
+          model: UsuarioModelo,
+        },
+      ]);
+
+      if (!periodoEvaluacion)
+        throw new Error("No se ha encontrado Periodo Evaluacion");
+
+      return periodoEvaluacion;
+    },
     obtenerPeriodoEvaluacionPorUsuario: async (_, __, { usuario }) => {
       const { cliente, dataUsuario } = await validarUsuario(usuario, "Any");
 
