@@ -7,6 +7,7 @@ const PeriodoEvaluacionController = require("./PeriodosEvaluacionController");
 const EncuestaController = require("./EncuestaController");
 const PreguntaController = require("../controllers/PreguntasController");
 const EncuestasContestadasController = require("./../controllers/EncuestasContestadasController");
+const ReporteController = require('./reportes');
 
 module.exports = {
   Query: {
@@ -19,6 +20,7 @@ module.exports = {
     ...EncuestaController.Query,
     ...PreguntaController.Query,
     ...EncuestasContestadasController.Query,
+    ...ReporteController.Query
   },
   Mutation: {
     ...UsuarioController.Mutation,
@@ -29,5 +31,6 @@ module.exports = {
     ...PeriodoEvaluacionController.Mutation,
     ...EncuestaController.Mutation,
     ...EncuestasContestadasController.Mutation,
+
   },
 };

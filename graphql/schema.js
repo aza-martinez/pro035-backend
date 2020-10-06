@@ -93,6 +93,7 @@ const typeDefs = gql`
     fechaFinalizado: String
     empresa: Empresa
     encuestas: [Int]
+    encuestasContestadas: [EncuestaContestada]
   }
 
   type EmpleadosPeriodoEvaluacion {
@@ -318,6 +319,7 @@ const typeDefs = gql`
       numeroGuia: String
     ): [EncuestaContestada]
     obtenerEncuestaContestadaEmpleado(input: ReporteInput): EncuestaContestada
+    reporteCentroTrabajo(periodoEvaluacion: ID!, numeroGuia: String!) : PeriodoEvaluacion
   }
 
   type Mutation {
@@ -336,6 +338,7 @@ const typeDefs = gql`
       numeroEncuesta: String
     ): EncuestaContestada
     generarReportePorEmpleado(input: ReporteInput): EncuestaContestada
+
   }
 `;
 

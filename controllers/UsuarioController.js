@@ -1,4 +1,3 @@
-
 const bcryptjs = require("bcryptjs");
 const UsuarioModelo = require("../models/UsuarioModelo");
 const validarUsuario = require("../helpers/validarUsuario");
@@ -37,9 +36,17 @@ const UsuarioController = {
           model: PuestosModelo,
         },
         {
-          path: 'empresa',
-          model: EmpresaModelo
-        }
+          path: "empresa",
+          model: EmpresaModelo,
+        },
+        {
+          path: "centroTrabajo",
+          model: CentroTrabajoModelo,
+        },
+        {
+          path: "areaTrabajo",
+          model: AreaTrabajoModelo,
+        },
       ]);
 
       if (!empleado)
