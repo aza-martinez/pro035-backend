@@ -3,7 +3,7 @@ const EncuestasContestadas = require("./../models/EncuestasContestadasModelo");
 const PeriodoEvaluacionModelo = require("./../models/PeriodoEvaluacionModelo");
 const CategoriaModelo = require("./../models/CategoriaModelo");
 const UsuarioModelo = require("../models/UsuarioModelo");
-
+const CentroTrabajoModelo = require('./../models/CentroTrabajoModelo')
 const reportesController = {
   Query: {
     reporteCentroTrabajo: async (
@@ -36,6 +36,10 @@ const reportesController = {
       ]);
 
       const populated = await PeriodoEvaluacionModelo.populate(filtered, [
+        {
+          path: 'centroTrabajo',
+          model: CentroTrabajoModelo
+        },
         {
           path: "encuestasContestadas.empleado",
           model: UsuarioModelo,

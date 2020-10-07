@@ -72,6 +72,10 @@ const UsuarioController = {
           path: "areaTrabajo",
           model: AreaTrabajoModelo,
         },
+        {
+          path: "centroTrabajo",
+          model: CentroTrabajoModelo,
+        },
       ]);
 
       if (!usuarioAutenticado)
