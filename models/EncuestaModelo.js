@@ -25,6 +25,13 @@ const EncuestasSchema = Schema(
         ref: "Categorias",
       },
     ],
+    nivelesRiesgo: [
+      {
+        nivel: String,
+        minimo: Number,
+        maximo: Number,
+      },
+    ],
   },
   { versionKey: false }
 );

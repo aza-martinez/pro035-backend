@@ -18,6 +18,13 @@ const DominioSchema = Schema(
       type: Date,
     },
     dimensiones: [{ type: Schema.ObjectId, ref: "Dimensiones" }],
+    nivelesRiesgo: [
+      {
+        nivel: String,
+        minimo: Number,
+        maximo: Number,
+      },
+    ],
   },
   { versionKey: false }
 );

@@ -18,8 +18,15 @@ const CategoriasSchema = Schema(
     preguntas: [{ type: Schema.ObjectId, ref: "Preguntas" }],
     enumeracion: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
+    nivelesRiesgo: [
+      {
+        nivel: String,
+        minimo: Number,
+        maximo: Number,
+      },
+    ],
   },
   { versionKey: false }
 );

@@ -85,6 +85,7 @@ const typeDefs = gql`
     nombre: String
     rangoEmpleados: String
     centroTrabajo: CentroTrabajo
+    encuesta: Encuesta
     estatus: String
     empleados: [EmpleadosPeriodoEvaluacion]
     creado: String
@@ -93,6 +94,8 @@ const typeDefs = gql`
     fechaFinalizado: String
     empresa: Empresa
     encuestas: [Int]
+    categorias: [Categoria]
+    dominios: [Dominio]
     encuestasContestadas: [EncuestaContestada]
   }
 
@@ -105,6 +108,7 @@ const typeDefs = gql`
   type EncuestasEmpleadoPE {
     estatus: String
     numeroGuia: String
+    descripcion: String
   }
 
   type Encuesta {
@@ -112,6 +116,7 @@ const typeDefs = gql`
     descripcion: String
     totalPreguntas: Int
     categorias: [Categoria]
+    nivelesRiesgo: [NivelRiesgo]
   }
 
   type Categoria {
@@ -121,12 +126,20 @@ const typeDefs = gql`
     dominios: [Dominio]
     preguntas: [ID]
     enumeracion: Int
+    nivelesRiesgo: [NivelRiesgo]
+  }
+
+  type NivelRiesgo {
+    nivel: String
+    minimo: Int
+    maximo: Int
   }
 
   type Dominio {
     id: ID
     numeroGuia: Int
     descripcion: String
+    nivelesRiesgo: [NivelRiesgo]
     dimensiones: [Dimension]
   }
 
@@ -178,8 +191,8 @@ const typeDefs = gql`
   type RespuestaEncuestaContestada {
     id: ID
     categoria: Categoria
-    dominio: ID
-    dimension: ID
+    dominio: Dominio
+    dimension: Dimension
     enumeracion: Float
     pregunta: Pregunta
     valorRespuesta: Int
@@ -319,7 +332,10 @@ const typeDefs = gql`
       numeroGuia: String
     ): [EncuestaContestada]
     obtenerEncuestaContestadaEmpleado(input: ReporteInput): EncuestaContestada
-    reporteCentroTrabajo(periodoEvaluacion: ID!, numeroGuia: String!) : PeriodoEvaluacion
+    reporteCentroTrabajo(
+      periodoEvaluacion: ID!
+      numeroGuia: String!
+    ): PeriodoEvaluacion
   }
 
   type Mutation {
@@ -338,7 +354,6 @@ const typeDefs = gql`
       numeroEncuesta: String
     ): EncuestaContestada
     generarReportePorEmpleado(input: ReporteInput): EncuestaContestada
-
   }
 `;
 

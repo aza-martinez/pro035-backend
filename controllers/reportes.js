@@ -1,9 +1,11 @@
 const mongoose = require("mongoose");
-const EncuestasContestadas = require("./../models/EncuestasContestadasModelo");
+
 const PeriodoEvaluacionModelo = require("./../models/PeriodoEvaluacionModelo");
 const CategoriaModelo = require("./../models/CategoriaModelo");
-const UsuarioModelo = require("../models/UsuarioModelo");
-const CentroTrabajoModelo = require('./../models/CentroTrabajoModelo')
+const DominioModelo = require("./../models/DominioModelo");
+const DimensionModelo = require("./../models/DimensionModelo");
+const validarUsuario = require("../helpers/validarUsuario");
+
 const reportesController = {
   Query: {
     reporteCentroTrabajo: async (
@@ -11,9 +13,40 @@ const reportesController = {
       { numeroGuia, periodoEvaluacion },
       { usuario }
     ) => {
-      const idPeriodo = mongoose.Types.ObjectId(periodoEvaluacion);
+      const { cliente } =  await validarUsuario(usuario, "Administrador");
+
+      const idPeriodoEvaluacion = mongoose.Types.ObjectId(periodoEvaluacion);
+      const idCliente = mongoose.Types.ObjectId(cliente);
+
       const filtered = await PeriodoEvaluacionModelo.aggregate([
-        { $match: { _id: idPeriodo } },
+        {
+          $match: {
+            $expr: {
+              $and: [
+                { $eq: ["$_id", idPeriodoEvaluacion] },
+                { $eq: ['$cliente', idCliente] },
+                { $in: [parseInt(numeroGuia), "$encuestas"] },
+              ],
+            },
+          },
+        },
+        {
+          $lookup: {
+            from: "encuestas",
+            as: "encuesta",
+            let: { numeroGuia },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $eq: ["$numeroEncuesta", "$$numeroGuia"],
+                  },
+                },
+              },
+            ],
+          },
+        },
+        { $unwind: "$encuesta" },
         {
           $lookup: {
             from: "encuestascontestadas",
@@ -26,10 +59,60 @@ const reportesController = {
                     $and: [
                       { $eq: ["$periodoEvaluacion", "$$periodoEvaluacion"] },
                       { $eq: ["$numeroGuia", "$$numeroGuia"] },
+                      { $ne: ["$categoria", ""] },
                     ],
                   },
                 },
               },
+              {
+                $lookup: {
+                  from: "usuarios",
+                  let: { empleado_id: "$empleado" },
+                  as: "empleado",
+                  pipeline: [
+                    { $match: { $expr: { $eq: ["$_id", "$$empleado_id"] } } },
+                  ],
+                },
+              },
+              { $unwind: "$empleado" },
+            ],
+          },
+        },
+        {
+          $lookup: {
+            from: "centrostrabajos",
+            localField: "centroTrabajo",
+            foreignField: "_id",
+            as: "centroTrabajo",
+          },
+        },
+        { $unwind: { path: "$centroTrabajo" } },
+        {
+          $lookup: {
+            from: "empresas",
+            localField: "empresa",
+            foreignField: "_id",
+            as: "empresa",
+          },
+        },
+        { $unwind: { path: "$empresa" } },
+        {
+          $lookup: {
+            from: "categorias",
+            as: "categorias",
+            let: { numeroGuia },
+            pipeline: [
+              { $match: { $expr: { $eq: ["$numeroGuia", "$$numeroGuia"] } } },
+            ],
+          },
+        },
+        {
+          $lookup: {
+            from: "dominios",
+            as: "dominios",
+            let: { numeroGuia },
+            pipeline: [
+              { $match: { $expr: { $eq: ["$numeroGuia", "$$numeroGuia"] } } },
             ],
           },
         },
@@ -37,16 +120,16 @@ const reportesController = {
 
       const populated = await PeriodoEvaluacionModelo.populate(filtered, [
         {
-          path: 'centroTrabajo',
-          model: CentroTrabajoModelo
-        },
-        {
-          path: "encuestasContestadas.empleado",
-          model: UsuarioModelo,
-        },
-        {
-          path: "encuestasContestadas.categoria",
+          path: "encuestasContestadas.respuestas.categoria",
           model: CategoriaModelo,
+        },
+        {
+          path: "encuestasContestadas.respuestas.dominio",
+          model: DominioModelo,
+        },
+        {
+          path: "encuestasContestadas.respuestas.dimension",
+          model: DimensionModelo,
         },
       ]);
 
