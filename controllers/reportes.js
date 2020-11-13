@@ -5,15 +5,18 @@ const CategoriaModelo = require("./../models/CategoriaModelo");
 const DominioModelo = require("./../models/DominioModelo");
 const DimensionModelo = require("./../models/DimensionModelo");
 const validarUsuario = require("../helpers/validarUsuario");
+const UsuarioModelo = require("../models/UsuarioModelo");
+
+// CT  = CENTRO TRABAJO
 
 const reportesController = {
   Query: {
-    reporteCentroTrabajo: async (
+    reporteEntornoOrganizacionalCT: async (
       _,
       { numeroGuia, periodoEvaluacion },
       { usuario }
     ) => {
-      const { cliente } =  await validarUsuario(usuario, "Administrador");
+      const { cliente } = await validarUsuario(usuario, "Administrador");
 
       const idPeriodoEvaluacion = mongoose.Types.ObjectId(periodoEvaluacion);
       const idCliente = mongoose.Types.ObjectId(cliente);
@@ -24,7 +27,7 @@ const reportesController = {
             $expr: {
               $and: [
                 { $eq: ["$_id", idPeriodoEvaluacion] },
-                { $eq: ['$cliente', idCliente] },
+                { $eq: ["$cliente", idCliente] },
                 { $in: [parseInt(numeroGuia), "$encuestas"] },
               ],
             },
@@ -130,6 +133,10 @@ const reportesController = {
         {
           path: "encuestasContestadas.respuestas.dimension",
           model: DimensionModelo,
+        },
+        {
+          path: "empleados.empleado",
+          model: UsuarioModelo,
         },
       ]);
 

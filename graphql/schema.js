@@ -94,9 +94,6 @@ const typeDefs = gql`
     fechaFinalizado: String
     empresa: Empresa
     encuestas: [Int]
-    categorias: [Categoria]
-    dominios: [Dominio]
-    encuestasContestadas: [EncuestaContestada]
   }
 
   type EmpleadosPeriodoEvaluacion {
@@ -199,6 +196,26 @@ const typeDefs = gql`
     descripcionRespuesta: String
     respuesta: ID
   }
+
+  type ReporteGeneral {
+    nombre: String
+    rangoEmpleados: String
+    centroTrabajo: CentroTrabajo
+    encuesta: Encuesta
+    estatus: String
+    empleados: [EmpleadosPeriodoEvaluacion]
+    creado: String
+    fechaPendiente: String
+    fechaEnProceso: String
+    fechaFinalizado: String
+    empresa: Empresa
+    encuestas: [Int]
+    categorias: [Categoria]
+    dominios: [Dominio]
+    encuestasContestadas: [EncuestaContestada]
+    totalEmpledosATS: Int
+  }
+
 
   input UsuarioInput {
     nombre: String!
@@ -332,10 +349,10 @@ const typeDefs = gql`
       numeroGuia: String
     ): [EncuestaContestada]
     obtenerEncuestaContestadaEmpleado(input: ReporteInput): EncuestaContestada
-    reporteCentroTrabajo(
+    reporteEntornoOrganizacionalCT(
       periodoEvaluacion: ID!
       numeroGuia: String!
-    ): PeriodoEvaluacion
+    ): ReporteGeneral
   }
 
   type Mutation {
