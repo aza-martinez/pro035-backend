@@ -8,7 +8,6 @@ const validarUsuario = require("../helpers/validarUsuario");
 const UsuarioModelo = require("../models/UsuarioModelo");
 
 // CT  = CENTRO TRABAJO
-
 const reportesController = {
   Query: {
     reporteEntornoOrganizacionalCT: async (

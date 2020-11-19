@@ -10,6 +10,7 @@ const PuestoModelo = require("./../models/PuestosModelo");
 const AreaTrabajoModelo = require("../models/AreaTrabajoModelo");
 const MensajeModelo = require("./../models/mensajes");
 const CentroTrabajoModelo = require("../models/CentroTrabajoModelo");
+const DominioModelo = require("../models/DominioModelo");
 
 const EncuestasContestadasController = {
   Query: {
@@ -96,6 +97,10 @@ const EncuestasContestadasController = {
         {
           path: "respuestas.categoria",
           model: CategoriaModelo,
+        },
+        {
+          path: "respuestas.dominio",
+          model: DominioModelo,
         },
         {
           path: "periodoEvaluacion",
