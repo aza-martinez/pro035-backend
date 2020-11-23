@@ -216,7 +216,6 @@ const typeDefs = gql`
     totalEmpledosATS: Int
   }
 
-
   input UsuarioInput {
     nombre: String!
     apellidoPaterno: String!
@@ -352,6 +351,11 @@ const typeDefs = gql`
     reporteEntornoOrganizacionalCT(
       periodoEvaluacion: ID!
       numeroGuia: String!
+    ): ReporteGeneral
+    reporteAreaTrabajo(
+      periodoEvaluacion: ID!
+      numeroGuia: String!
+      areaTrabajo: ID!
     ): ReporteGeneral
   }
 
