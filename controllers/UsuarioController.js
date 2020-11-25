@@ -18,10 +18,14 @@ const UsuarioController = {
           { perfil: "Empleado" },
           { estatus: true },
         ],
-      }).populate({
-        path: "puesto",
-        model: PuestosModelo,
-      });
+      }).populate([
+        {
+          path: "puesto",
+        },
+        {
+          path: 'centroTrabajo'
+        }
+      ]);
 
       return usuarios;
     },
