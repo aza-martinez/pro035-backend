@@ -91,10 +91,6 @@ const UsuariosSchema = mongoose.Schema(
       type: Boolean,
       default: true,
     },
-    timestamp: {
-      type: Date,
-      default: Date.now(),
-    },
     encuestasPendientes: {
       type: Array,
     },
@@ -115,7 +111,7 @@ const UsuariosSchema = mongoose.Schema(
       ref: "AreasTrabajo",
     },
   },
-  { versionKey: false }
+  { versionKey: false, timestamps: true }
 );
 
 module.exports = mongoose.model("Usuario", UsuariosSchema);

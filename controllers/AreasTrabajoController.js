@@ -107,21 +107,17 @@ const AreaTrabajoController = {
 
       // CREAMOS NUEVA AREA DE TRABAJO
       input.cliente = cliente;
+
       const areaTrabajoNueva = new AreaTrabajoModelo(input);
+
       const response = await areaTrabajoNueva.save();
 
-      const responsePopulated = await AreaTrabajoModelo.populate(response, [
-        {
-          path: "empresa",
-          model: EmpresaModelo,
-        },
-        {
-          path: "centrosTrabajo",
-          model: CentroTrabajoModelo,
-        },
-      ]);
+      if (!response)
+        throw new Error(
+          "No hemos podido completar el registro. intenta nuevamente"
+        );
 
-      return responsePopulated;
+      return response;
     },
     actualizarAreaTrabajo: async (_, { id, input }, { usuario }) => {
       // TODO: VALIDAR USUARIO

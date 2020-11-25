@@ -16,9 +16,6 @@ const EncuestasSchema = Schema(
     totalPreguntas: {
       type: Number,
     },
-    timestamp: {
-      type: Date,
-    },
     categorias: [
       {
         type: Schema.ObjectId,
@@ -33,7 +30,7 @@ const EncuestasSchema = Schema(
       },
     ],
   },
-  { versionKey: false }
+  { versionKey: false, timestamps: true }
 );
 
 module.exports = mongoose.model("Encuestas", EncuestasSchema);

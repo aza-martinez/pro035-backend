@@ -13,10 +13,9 @@ const DimensionesSchema = Schema(
       trim: true,
       required: true,
     },
-    timestamp: Date,
     preguntas: [{ type: Schema.ObjectId, ref: "Preguntas" }],
   },
-  { versionKey: false }
+  { versionKey: false, timestamps: true }
 );
 
 module.exports = mongoose.model("Dimensiones", DimensionesSchema);

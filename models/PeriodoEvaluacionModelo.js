@@ -3,14 +3,13 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-
 const EmpleadosPeriodoEvaluacion = new Schema({
   empleado: {
     type: Schema.ObjectId,
-    ref: 'Usuario'
+    ref: "Usuario",
   },
-  encuestas: []
-})
+  encuestas: [],
+});
 
 const PeriodoEvaluacionSchema = new Schema(
   {
@@ -42,6 +41,7 @@ const PeriodoEvaluacionSchema = new Schema(
     },
     fechaPendiente: {
       type: Date,
+      default: Date.now(),
     },
     fechaEnProceso: {
       type: Date,
@@ -50,19 +50,19 @@ const PeriodoEvaluacionSchema = new Schema(
       type: Date,
     },
     empresa: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'Empresa'
+      type: mongoose.Schema.ObjectId,
+      ref: "Empresa",
     },
     cliente: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'Cliente'
+      type: mongoose.Schema.ObjectId,
+      ref: "Cliente",
     },
     encuestas: {
       type: [Number],
-      required: true
-    }
+      required: true,
+    },
   },
-  { versionKey: false }
+  { versionKey: false, timestamps: true }
 );
 
 module.exports = mongoose.model("PeriodosEvaluacion", PeriodoEvaluacionSchema);

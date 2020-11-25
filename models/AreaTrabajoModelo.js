@@ -2,7 +2,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-// TODO:FECHA MEXICO
 const AreasTrabajoSchema = Schema(
   {
     nombre: {
@@ -17,10 +16,6 @@ const AreasTrabajoSchema = Schema(
     estatus: {
       type: Boolean,
       default: true,
-    },
-    timestamp: {
-      type: Date,
-      default: Date.now(),
     },
     empleados: [
       {
@@ -45,7 +40,10 @@ const AreasTrabajoSchema = Schema(
       required: true,
     },
   },
-  { versionKey: false }
+  {
+    versionKey: false,
+    timestamps: true,
+  }
 );
 
 module.exports = mongoose.model("AreasTrabajo", AreasTrabajoSchema);

@@ -13,7 +13,6 @@ const CategoriasSchema = Schema(
       required: true,
       trim: true,
     },
-    timestamp: Date,
     dominios: [{ type: Schema.ObjectId, ref: "Dominios" }],
     preguntas: [{ type: Schema.ObjectId, ref: "Preguntas" }],
     enumeracion: {
@@ -28,7 +27,7 @@ const CategoriasSchema = Schema(
       },
     ],
   },
-  { versionKey: false }
+  { versionKey: false, timestamps: true }
 );
 
 module.exports = mongoose.model("Categorias", CategoriasSchema);

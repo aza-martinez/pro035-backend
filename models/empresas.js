@@ -33,10 +33,6 @@ const EmpresasSchema = mongoose.Schema(
       type: Boolean,
       default: true,
     },
-    timestamp: {
-      type: Date,
-      default: Date.now(),
-    },
     idCentro: [{ type: mongoose.Schema.ObjectId, ref: "Centro" }],
     idArea: [{ type: mongoose.Schema.ObjectId, ref: "Area" }],
     areas: [{ type: mongoose.Schema.ObjectId, ref: "Area" }],
@@ -58,7 +54,7 @@ const EmpresasSchema = mongoose.Schema(
       trim: true,
     },
   },
-  { versionKey: false }
+  { versionKey: false, timestamps: true }
 );
 
 module.exports = mongoose.model("Empresa", EmpresasSchema);

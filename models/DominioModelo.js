@@ -14,9 +14,6 @@ const DominioSchema = Schema(
       trim: true,
       required: true,
     },
-    timestamp: {
-      type: Date,
-    },
     dimensiones: [{ type: Schema.ObjectId, ref: "Dimensiones" }],
     nivelesRiesgo: [
       {
@@ -26,7 +23,7 @@ const DominioSchema = Schema(
       },
     ],
   },
-  { versionKey: false }
+  { versionKey: false, timestamps: true }
 );
 
 module.exports = mongoose.model("Dominios", DominioSchema);

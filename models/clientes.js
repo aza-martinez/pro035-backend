@@ -36,12 +36,8 @@ const ClientesSchema = mongoose.Schema(
       type: Boolean,
       default: true,
     },
-    timestamp: {
-      type: Date,
-      default: Date.now(),
-    },
   },
-  { versionKey: false }
+  { versionKey: false, timestamps: true }
 );
 
 module.exports = mongoose.model("Cliente", ClientesSchema);

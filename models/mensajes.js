@@ -7,10 +7,9 @@ const MensajesSchema = Schema(
     mensaje: String,
     numGuia: String,
     orden: String,
-    timestamp: Date,
     plural: String,
   },
-  { versionKey: false }
+  { versionKey: false, timestamps: true }
 );
 
 module.exports = mongoose.model("Mensajes", MensajesSchema);

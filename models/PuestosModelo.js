@@ -11,21 +11,16 @@ const PuestoSchema = mongoose.Schema(
     },
     descripcion: {
       type: String,
-      required: true,
       trim: true,
     },
     estatus: {
       type: Boolean,
       default: true,
     },
-    timestamp: {
-      type: Date,
-      default: Date.now(),
-    },
     cliente: {
       type: mongoose.Schema.ObjectId,
       ref: "Cliente",
-      required: true
+      required: true,
     },
     empresa: {
       type: mongoose.Schema.ObjectId,
@@ -33,7 +28,7 @@ const PuestoSchema = mongoose.Schema(
       required: true,
     },
   },
-  { versionKey: false }
+  { versionKey: false, timestamps: true }
 );
 
 module.exports = mongoose.model("Puesto", PuestoSchema);

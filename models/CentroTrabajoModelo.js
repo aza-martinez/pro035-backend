@@ -29,10 +29,6 @@ const CentrosSchema = Schema(
       type: Boolean,
       default: true,
     },
-    timestamp: {
-      type: Date,
-      default: Date.now(),
-    },
     empresa: {
       type: Schema.Types.ObjectId,
       ref: "Empresa",
@@ -46,7 +42,7 @@ const CentrosSchema = Schema(
     areasDeTrabajo: [{ type: Schema.ObjectId, ref: "Areas" }],
     periodosDeEvaluacion: [{ type: Schema.ObjectId, ref: "Periodos" }],
   },
-  { versionKey: false }
+  { versionKey: false, timestamps: true }
 );
 
 module.exports = mongoose.model("CentrosTrabajo", CentrosSchema);
