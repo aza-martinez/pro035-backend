@@ -23,8 +23,8 @@ const UsuarioController = {
           path: "puesto",
         },
         {
-          path: 'centroTrabajo'
-        }
+          path: "centroTrabajo",
+        },
       ]);
 
       return usuarios;
@@ -193,6 +193,23 @@ const UsuarioController = {
       });
 
       return usuarioPopulate;
+    },
+    eliminarUsuario: async (_, input, { usuario }) => {
+      const { cliente } = await validarUsuario(usuario, "Administrador");
+
+      let user = await UsuarioModelo.exists({ _id: input.usuario, cliente });
+
+      if (!user) throw new Error("Usuario no encontrado");
+
+      const data = { estatus: false, fechaBaja: new Date() };
+      user = await UsuarioModelo.findByIdAndUpdate(
+        { _id: input.usuario },
+        data
+      );
+
+      if (!user) throw new Error("No hemos podido eliminar el usuario.");
+
+      return true;
     },
   },
 };

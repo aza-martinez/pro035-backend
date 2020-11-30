@@ -363,6 +363,7 @@ const typeDefs = gql`
     nuevoUsuario(input: UsuarioInput): Usuario
     actualizarUsuario(id: ID!, input: UsuarioInput): Usuario
     agregarEmpresa(input: EmpresaInput, logo: Upload): Empresa
+    eliminarUsuario(usuario: ID!): Boolean
     agregarCentroTrabajo(input: CentroTrabajoInput): CentroTrabajo
     actualizarCentroTrabajo(id: ID!, input: CentroTrabajoInput): CentroTrabajo
     agregarAreaTrabajo(input: AreaTrabajoInput): AreaTrabajo

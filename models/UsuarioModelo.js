@@ -110,6 +110,9 @@ const UsuariosSchema = mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: "AreasTrabajo",
     },
+    fechaBaja: {
+      type: Date,
+    },
   },
   { versionKey: false, timestamps: true }
 );
