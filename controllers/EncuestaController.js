@@ -8,6 +8,8 @@ const PreguntaModelo = require("./../models/PreguntasModelo");
 const RespuestasModelo = require("./../models/RespuestasModelo");
 const PeriodoEvaluacionModelo = require("./../models/PeriodoEvaluacionModelo");
 const validarUsuario = require("./../helpers/validarUsuario");
+const mongoose = require("mongoose");
+
 const EncuestaController = {
   Query: {
     obtenerEncuestaPorNumeracion: async (
@@ -46,30 +48,95 @@ const EncuestaController = {
     },
     obtenerEncuestasPendientesUsuario: async (_, __, { usuario }) => {
       const { cliente, dataUsuario } = await validarUsuario(usuario, "Any");
+      const empleado = mongoose.Types.ObjectId(dataUsuario._id);
 
-      const periodoEvaluacion = await PeriodoEvaluacionModelo.findOne(
+      const periodoEvaluacion = await PeriodoEvaluacionModelo.aggregate([
         {
-          $and: [
-            { cliente },
-            { estatus: "Pendiente" },
-            { "empleados.empleado": dataUsuario._id },
-          ],
+          $match: {
+            $expr: {
+              $and: [
+                { $in: [empleado, "$empleados.empleado"] },
+                { cliente },
+                { estatus: "Pendiente" },
+              ],
+            },
+          },
         },
-        { empleados: 1, _id: 0 }
-      );
+        {
+          $project: {
+            empleado: {
+              $filter: {
+                input: "$empleados",
+                as: "empleado",
+                cond: {
+                  $and: [
+                    {
+                      $eq: ["$$empleado.empleado", empleado],
+                    },
+                  ],
+                },
+              },
+            },
+            nombre: true,
+            rangoEmpleados: true,
+            estatus: true,
+            _id: true,
+          },
+        },
+        {
+          $unwind: {
+            path: "$empleado",
+          },
+        },
+        {
+          $match: {
+            $expr: {
+              $and: [
+                {
+                  $in: ["Pendiente", "$empleado.encuestas.estatus"],
+                },
+              ],
+            },
+          },
+        },
+        {
+          $project: {
+            encuestas: {
+              $filter: {
+                input: "$empleado.encuestas",
+                as: "encuesta",
+                cond: {
+                  $and: [
+                    {
+                      $eq: ["$$encuesta.estatus", "Pendiente"],
+                    },
+                  ],
+                },
+              },
+            },
+            nombre: true,
+            rangoEmpleados: true,
+            estatus: true,
+            empleado: true,
+            id: {
+              $toObjectId: "$_id",
+            },
+          },
+        },
+        {
+          $lookup: {
+            from: "encuestas",
+            as: "encuestas",
+            localField: "encuestas.numeroGuia",
+            foreignField: "numeroEncuesta",
+          },
+        },
+      ]);
 
       if (!periodoEvaluacion)
         throw new Error("No se encontraron encuestas pendientes");
 
-      const empleado = periodoEvaluacion.empleados.find(
-        (empleado) => empleado.empleado == dataUsuario._id.toString()
-      );
-
-      const encuestas = empleado.encuestas.filter(
-        ({ estatus }) => estatus == "Pendiente"
-      );
-
-      return encuestas;
+      return periodoEvaluacion;
     },
   },
   Mutation: {},

@@ -216,6 +216,13 @@ const typeDefs = gql`
     totalEmpledosATS: Int
   }
 
+  type EncuestaPendiente {
+    id: ID
+    nombre: String
+    rangoEmpleados: String
+    encuestas: [Encuesta]
+  }
+
   input UsuarioInput {
     nombre: String!
     apellidoPaterno: String!
@@ -339,7 +346,7 @@ const typeDefs = gql`
       centroTrabajo: ID
     ): [PeriodoEvaluacion]
     obtenerPeriodoEvaluacion(id: ID): PeriodoEvaluacion
-    obtenerEncuestasPendientesUsuario: [EncuestasEmpleadoPE]
+    obtenerEncuestasPendientesUsuario: [EncuestaPendiente]
     obtenerEncuestaPorNumeracion(numeroEncuesta: String!): Encuesta
     obtenerPreguntasPorEncuesta(numeroEncuesta: String!): [Pregunta]
     obtenerPeriodoEvaluacionPorUsuario: PeriodoEvaluacion
