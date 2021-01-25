@@ -11,6 +11,7 @@ const schema = require("./../graphql");
 const Routes = require("./../routes");
 
 // MODELS
+const { Job, User } = require("./../models");
 
 // REPOSITORIES
 
@@ -24,6 +25,10 @@ container
   })
   .register({
     router: asFunction(Routes).singleton(),
+  })
+  .register({
+    Job: asValue(Job),
+    User: asValue(User),
   });
 
 module.exports = container;
