@@ -1,6 +1,6 @@
 const PeriodoEvaluacionModelo = require("./../models/PeriodoEvaluacionModelo");
 const validarUsuario = require("../helpers/validarUsuario");
-const UsuarioModelo = require("./../models/UsuarioModelo");
+const UsuarioModelo = require("./../models/user.model");
 const CentroTrabajoModelo = require("./../models/CentroTrabajoModelo");
 const EmpresaModelo = require("./../models/empresas");
 

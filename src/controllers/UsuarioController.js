@@ -1,8 +1,8 @@
 const bcryptjs = require("bcryptjs");
-const UsuarioModelo = require("../models/UsuarioModelo");
+const UsuarioModelo = require("../models/user.model");
 const validarUsuario = require("../helpers/validarUsuario");
 const CentroTrabajoModelo = require("./../models/CentroTrabajoModelo");
-const PuestosModelo = require("./../models/PuestosModelo");
+const PuestosModelo = require("./../models/job.model");
 const EmpresaModelo = require("./../models/empresas");
 const AreaTrabajoModelo = require("../models/AreaTrabajoModelo");
 

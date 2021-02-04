@@ -5,7 +5,7 @@ const CategoriaModelo = require("./../models/CategoriaModelo");
 const DominioModelo = require("./../models/DominioModelo");
 const DimensionModelo = require("./../models/DimensionModelo");
 const validarUsuario = require("../helpers/validarUsuario");
-const UsuarioModelo = require("../models/UsuarioModelo");
+const UsuarioModelo = require("../models/user.model");
 
 // CT  = CENTRO TRABAJO
 const reportesController = {
@@ -268,10 +268,7 @@ const reportesController = {
                 input: "$encuestasContestadas",
                 as: "encuesta",
                 cond: {
-                  $eq: [
-                    "$$encuesta.empleado.areaTrabajo",
-                    idAreaTrabajo,
-                  ],
+                  $eq: ["$$encuesta.empleado.areaTrabajo", idAreaTrabajo],
                 },
               },
             },

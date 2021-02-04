@@ -1,7 +1,7 @@
 "use strict";
 
 require("dotenv").config();
-const UsuarioModelo = require("./../models/UsuarioModelo");
+const UsuarioModelo = require("./../models/user.model");
 
 const validarUsuario = async (usuario, perfil) => {
   if (!usuario) throw new Error("Credenciales no válidas");

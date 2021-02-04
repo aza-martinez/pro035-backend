@@ -1,4 +1,4 @@
-const Controllers = require("./../../../controllers");
+const Controllers = require("./../../controllers");
 
 const resolvers = {
   ...Controllers,

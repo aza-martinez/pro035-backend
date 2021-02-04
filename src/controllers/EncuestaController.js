@@ -8,7 +8,7 @@ const PreguntaModelo = require("./../models/PreguntasModelo");
 const RespuestasModelo = require("./../models/RespuestasModelo");
 const PeriodoEvaluacionModelo = require("./../models/PeriodoEvaluacionModelo");
 const validarUsuario = require("./../helpers/validarUsuario");
-const mongoose = require("mongoose");
+const validateToken = require("./../helpers/auth0");
 
 const EncuestaController = {
   Query: {
@@ -46,17 +46,16 @@ const EncuestaController = {
 
       return encuesta;
     },
-    obtenerEncuestasPendientesUsuario: async (_, __, { usuario }) => {
-      const { cliente, dataUsuario } = await validarUsuario(usuario, "Any");
-      const empleado = mongoose.Types.ObjectId(dataUsuario._id);
+    obtenerEncuestasPendientesUsuario: async (_, __, { token }) => {
+      const { user } = await validateToken(token, "Any");
 
       const periodoEvaluacion = await PeriodoEvaluacionModelo.aggregate([
         {
           $match: {
             $expr: {
               $and: [
-                { $in: [empleado, "$empleados.empleado"] },
-                { cliente },
+                { $in: [user._id, "$empleados.empleado"] },
+                { cliente: user.cliente },
                 { estatus: "Pendiente" },
               ],
             },
@@ -71,7 +70,7 @@ const EncuestaController = {
                 cond: {
                   $and: [
                     {
-                      $eq: ["$$empleado.empleado", empleado],
+                      $eq: ["$$empleado.empleado", user._id],
                     },
                   ],
                 },

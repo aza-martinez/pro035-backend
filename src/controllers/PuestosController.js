@@ -1,6 +1,6 @@
 "use strict";
 
-const PuestosModelo = require("./../models/PuestosModelo");
+const PuestosModelo = require("./../models/job.model");
 const validarUsuario = require("./../helpers/validarUsuario");
 
 const PuestosController = {
@@ -68,7 +68,7 @@ const PuestosController = {
         $and: [
           { nombre: input.nombre },
           { cliente },
-          { empresa: input.empresa},
+          { empresa: input.empresa },
           { estatus: true },
           { _id: { $nin: [id] } },
         ],
@@ -85,7 +85,10 @@ const PuestosController = {
         { new: true }
       );
 
-      if(!response)  throw new Error('No se ha podido actualizar puesto. Intente nuevamente.');
+      if (!response)
+        throw new Error(
+          "No se ha podido actualizar puesto. Intente nuevamente."
+        );
 
       return response;
     },

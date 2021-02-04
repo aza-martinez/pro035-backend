@@ -1,4 +1,5 @@
-const { createContainer, asClass, asValue, asFunction } = require("awilix");
+const awilix = require("awilix");
+const { createContainer, asClass, asValue, asFunction } = awilix;
 const config = require("../config");
 const app = require(".");
 
@@ -15,7 +16,9 @@ const { Job, User } = require("./../models");
 
 // REPOSITORIES
 
-const container = createContainer();
+const container = createContainer({
+  injectionMode: awilix.InjectionMode.PROXY,
+});
 
 container
   .register({
