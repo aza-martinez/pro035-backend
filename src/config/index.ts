@@ -3,7 +3,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 export const config = {
-  PORT: process.env.PORT,
+  PORT: process.env.PORT || 3001,
   MONGO_URI: process.env.MONGO_URI,
   JWT_USER_METADATA: process.env.JWT_USER_METADATA,
   cors: {
