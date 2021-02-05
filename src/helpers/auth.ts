@@ -1,7 +1,5 @@
-import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import jwksClient from "jwks-rsa";
-dotenv.config();
 
 export class Auth {
   private audience: string = "https://Pro035Development";
