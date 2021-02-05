@@ -1,10 +1,9 @@
 import "reflect-metadata";
 import { startServer } from "./app";
 import mongoose from "mongoose";
-import dotenv from 'dotenv';
+import { config } from "./config";
 
-dotenv.config();
-const URI: string = process.env.MONGO_URI as string;
+const URI: string = config.MONGO_URI as string;
 
 async function main() {
   try {
@@ -20,7 +19,7 @@ async function main() {
     app.listen(3001);
     console.log("Server on port", 3001);
   } catch (error) {
-      console.log('ERROR: ', error);
+    console.log("ERROR: ", error);
   }
 }
 
