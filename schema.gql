@@ -3,6 +3,17 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+"""Workplaces of users"""
+type AreasTrabajo {
+  centrosTrabajo: [CentrosTrabajo!]
+  cliente: Cliente!
+  descripcion: String
+  empresa: Empresa!
+  estatus: Boolean!
+  id: ID!
+  nombre: String!
+}
+
 """Book Authors"""
 type Author {
   email: String!
@@ -31,9 +42,59 @@ input BookInput {
   name: String!
 }
 
+"""Work Centers of Companies"""
+type CentrosTrabajo {
+  cliente: String!
+  cp: String!
+  direccion: String!
+  empresa: Empresa
+  estatus: Boolean
+  id: ID!
+  nombre: String!
+  telefono: String!
+}
+
+"""Clients of Pro035"""
+type Cliente {
+  alias: String!
+  calle: String
+  colonia: String
+  cp: String!
+  estatus: Boolean
+  id: ID!
+  razonSocial: String!
+  rfc: String!
+}
+
+"""Companies of clientes"""
+type Empresa {
+  alias: String!
+  cliente: String!
+  cp: String!
+  direccion: String!
+  estatus: Boolean!
+  giro: String!
+  id: ID!
+  logo: String!
+  principalesActividades: String!
+  razonSocial: String!
+  rfc: String!
+}
+
 type Mutation {
   createAuthor(author: AuthorInput!): Author!
   createBook(book: BookInput!): Book!
+  updateUser(id: String!, input: UsuarioInputUpdate!): Usuario
+}
+
+"""Jobs Positions of Users"""
+type Puesto {
+  cliente: Cliente!
+  descripcion: String
+  empresa: Empresa
+  estatus: Boolean!
+  id: ID!
+  nombre: String!
 }
 
 type Query {
@@ -41,27 +102,32 @@ type Query {
   authors: [Author!]!
   book(id: String!): Book
   books: [Book!]
+  companies: [Empresa!]
+  companiesByClient: [Empresa!]
+  user(company: String!, id: String!): Usuario
   users: [Usuario!]
+  usersByCompany(company: String!): [Usuario!]
 }
 
 """The books model"""
 type Usuario {
   apellidoMaterno: String!
   apellidoPaterno: String!
-  centroTrabajo: String
-  cliente: String
+  areaTrabajo: AreasTrabajo
+  centroTrabajo: CentrosTrabajo
+  cliente: String!
   email: String!
-  empresa: String
+  empresa: Empresa
   estadoCivil: String
-  estatus: Boolean
+  estatus: Boolean!
   experienciaPuestoActual: String
-  firstLogin: String
+  firstLogin: Boolean!
   id: ID!
   nivelEstudios: String
   nombre: String!
   password: String
   perfil: String!
-  puesto: String
+  puesto: Puesto
   rangoEdad: String
   rolarTurnos: String
   tiempoExperienciaLaboral: String
@@ -70,4 +136,37 @@ type Usuario {
   tipoPersonal: String
   tipoPuesto: String
   usuario: String!
+}
+
+input UsuarioInputCreate {
+  apellidoMaterno: String!
+  apellidoPaterno: String!
+  email: String!
+  nombre: String!
+  password: String!
+  usuario: String!
+}
+
+input UsuarioInputUpdate {
+  apellidoMaterno: String
+  apellidoPaterno: String
+  areaTrabajo: String
+  centroTrabajo: String
+  email: String
+  estadoCivil: String
+  experienciaPuestoActual: String
+  genero: String
+  nivelEstudios: String
+  nombre: String
+  password: String
+  perfil: String
+  puesto: String
+  rangoEdad: String
+  rolarTurnos: String
+  tiempoExperienciaLaboral: String
+  tipoContratacion: String
+  tipoJornada: String
+  tipoPersonal: String
+  tipoPuesto: String
+  usuario: String
 }

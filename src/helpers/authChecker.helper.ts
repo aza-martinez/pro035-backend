@@ -13,5 +13,5 @@ export const authChecker: AuthChecker<Context> = (
     return true;
   }
 
-  return true;
+  return false;
 };

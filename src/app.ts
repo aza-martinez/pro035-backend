@@ -15,11 +15,12 @@ export async function startServer() {
   const server = new ApolloServer({
     schema: await buildSchema({
       resolvers: [__dirname + "/**/*.resolver.{ts,js}"],
+      dateScalarMode: "timestamp",
       emitSchemaFile: true,
       validate: false,
       authChecker: authChecker,
     }),
-    playground: process.env.NODE_ENV === "development" ? true : false,
+    playground: true,
     introspection: true,
     tracing: true,
     context,

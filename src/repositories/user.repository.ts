@@ -9,4 +9,10 @@ export class UserRepository extends BaseRepository {
   async getUserByEmail(email: string) {
     return await UsuarioModel.findOne({ $or: [{ email }, { user: email }] });
   }
+
+  async getUsersByCompany(company: string, client: string) {
+    return await UsuarioModel.find({
+      $and: [{ estatus: true }, { cliente: client }, { empresa: company }],
+    });
+  }
 }

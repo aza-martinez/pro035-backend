@@ -6,7 +6,7 @@ import {
 } from "@typegoose/typegoose";
 import mongooseValidator from "mongoose-unique-validator";
 import { Author } from "./author.entitie";
-import autopopulate from 'mongoose-autopopulate'; 
+import autopopulate from "mongoose-autopopulate";
 
 @ObjectType({ description: "The books model" })
 @plugin(mongooseValidator, {
@@ -25,8 +25,8 @@ export class Book {
   @Property({ required: false })
   description: string;
 
-  @Field(_type => Author, { nullable: true })
-  @Property({ref: Author, required: false, autopopulate: true})
+  @Field((_type) => Author, { nullable: true })
+  @Property({ ref: Author, required: false, autopopulate: true })
   author: Author;
 }
 

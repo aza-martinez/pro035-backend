@@ -1,4 +1,4 @@
-import { Usuario } from "./../entities/user.entitie";
+import { Usuario } from "./user.interface";
 
 export interface Context {
   user: Usuario;

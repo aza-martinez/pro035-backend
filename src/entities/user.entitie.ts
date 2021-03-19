@@ -1,13 +1,32 @@
-import { ObjectType, Field, ID } from "type-graphql";
+import { ObjectType, Field, ID, Authorized } from "type-graphql";
 import {
   prop as Property,
   getModelForClass,
   plugin,
+  pre,
 } from "@typegoose/typegoose";
+import { Empresa } from "./company.entitie";
 import autopopulate from "mongoose-autopopulate";
+import { Cliente } from "./client.entitie";
+import { CentrosTrabajo } from "./workCenter.enitie";
+import { Puesto } from "./position.entitie";
+import { AreasTrabajo } from "./workplaces.entitie";
+import { hashPassword } from "../helpers/hashPassword.helper";
 
 @ObjectType({ description: "The books model" })
 @plugin(autopopulate as any)
+@pre<Usuario>("findOneAndUpdate", function () {
+  const user: any = this;
+
+  if (user._update.password) {
+    const hashedPassword: string = hashPassword(user._update.password);
+    user._update.password = hashedPassword;
+  }
+
+  if (user._update.password === "") {
+    delete user._update.password;
+  }
+})
 export class Usuario {
   @Field(() => ID)
   id: string;
@@ -76,33 +95,40 @@ export class Usuario {
   @Property({ required: false, trim: true })
   tiempoExperienciaLaboral: string;
 
+  @Authorized("Master")
   @Field({ nullable: true })
   @Property({ required: false, trim: true })
   password: string;
 
-  @Field({ nullable: true })
-  @Property({ required: false, trim: true })
-  firstLogin: string;
+  @Field()
+  @Property({ default: true })
+  firstLogin: boolean;
 
-  @Field({ nullable: true })
-  @Property({ required: false, trim: true })
-  cliente: string;
+  @Field(() => String)
+  @Property({ ref: Cliente, required: true, trim: true })
+  cliente: string | Cliente;
 
-  @Field({ nullable: true })
-  @Property({ required: false, trim: true })
-  centroTrabajo: string;
+  @Field(() => CentrosTrabajo, { nullable: true })
+  @Property({ required: true, ref: CentrosTrabajo, autopopulate: true })
+  centroTrabajo: string | CentrosTrabajo;
 
-  @Field({ nullable: true })
-  @Property({ required: false, trim: true })
-  empresa: string;
+  @Field(() => Empresa, { nullable: true })
+  @Property({ ref: Empresa, required: false, trim: true, autopopulate: true })
+  empresa: string | Empresa;
 
-  @Field({ nullable: true })
-  @Property({ required: false })
+  @Field()
+  @Property({ default: true })
   estatus: boolean;
 
-  @Field({ nullable: true })
-  @Property({ required: false, trim: true })
-  puesto: string;
+  @Field(() => Puesto, { nullable: true })
+  @Property({ required: false, ref: Puesto, autopopulate: true })
+  puesto: string | Puesto;
+
+  @Field(() => AreasTrabajo, { nullable: true })
+  @Property({ required: false, ref: AreasTrabajo, autopopulate: true })
+  areaTrabajo: string | Puesto;
 }
 
-export const UsuarioModel = getModelForClass(Usuario)
+export const UsuarioModel = getModelForClass(Usuario, {
+  schemaOptions: { timestamps: true },
+});

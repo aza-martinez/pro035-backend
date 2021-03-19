@@ -17,7 +17,7 @@ async function main() {
 
     const app = await startServer();
     app.listen(config.PORT);
-    console.log("Server on port", 3001);
+    console.log("Server on port", config.PORT);
   } catch (error) {
     console.log("ERROR: ", error);
   }
