@@ -1,8 +1,14 @@
-import { getModelForClass, prop as Property } from "@typegoose/typegoose";
+import {
+  getModelForClass,
+  prop as Property,
+  plugin,
+} from "@typegoose/typegoose";
 import { Field, ID, ObjectType } from "type-graphql";
 import { Cliente } from "./client.entitie";
 import { Empresa } from "./company.entitie";
+import autopopulate from "mongoose-autopopulate";
 
+@plugin(autopopulate as any)
 @ObjectType({ description: "Work Centers of Companies" })
 export class CentrosTrabajo {
   @Field(() => ID)
@@ -20,7 +26,7 @@ export class CentrosTrabajo {
   @Property({ required: true, trim: true })
   cp: string;
 
-  @Field()
+  @Field({ nullable: true })
   @Property({ required: true, trim: true })
   telefono: string;
 

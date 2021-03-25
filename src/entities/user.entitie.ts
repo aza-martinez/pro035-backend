@@ -10,7 +10,7 @@ import autopopulate from "mongoose-autopopulate";
 import { Cliente } from "./client.entitie";
 import { CentrosTrabajo } from "./workCenter.enitie";
 import { Puesto } from "./position.entitie";
-import { AreasTrabajo } from "./workplaces.entitie";
+import { AreasTrabajo } from "./workAreas";
 import { hashPassword } from "../helpers/hashPassword.helper";
 
 @ObjectType({ description: "The books model" })
