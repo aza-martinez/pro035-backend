@@ -17,3 +17,18 @@ export class WorkCenterInput {
   @Field({ nullable: false })
   empresa: String;
 }
+
+@InputType()
+export class WorkCenterUpdateInput{
+  @Field({ nullable: false })
+  nombre: String;
+
+  @Field({ nullable: false })
+  direccion: String;
+
+  @Field({ nullable: false })
+  cp: String;
+
+  @Field({ nullable: false })
+  telefono: String;
+}
