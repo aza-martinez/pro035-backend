@@ -47,7 +47,7 @@ type CentrosTrabajo {
   cliente: String!
   cp: String!
   direccion: String!
-  empresa: Empresa
+  empresa: Empresa!
   estatus: Boolean
   id: ID!
   nombre: String!
@@ -84,6 +84,7 @@ type Empresa {
 type Mutation {
   createAuthor(author: AuthorInput!): Author!
   createBook(book: BookInput!): Book!
+  createWorkCenter(workCenter: WorkCenterInput!): CentrosTrabajo
   updateUser(id: String!, input: UsuarioInputUpdate!): Usuario
 }
 
@@ -170,4 +171,12 @@ input UsuarioInputUpdate {
   tipoPersonal: String
   tipoPuesto: String
   usuario: String
+}
+
+input WorkCenterInput {
+  cp: String!
+  direccion: String!
+  empresa: String!
+  nombre: String!
+  telefono: String!
 }

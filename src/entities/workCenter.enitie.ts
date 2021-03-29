@@ -34,17 +34,15 @@ export class CentrosTrabajo {
   @Property({ default: true })
   estatus: boolean;
 
-  @Field(() => Empresa, { nullable: true })
+  @Field(() => Empresa)
   @Property({ ref: Empresa, required: false, trim: true, autopopulate: true })
   empresa: string | Empresa;
 
   @Field(() => String)
   @Property({ ref: Cliente, required: true, trim: true })
   cliente: string | Cliente;
-
-  createdAt: Date;
-
-  updatedAt: Date;
 }
 
-export const ModeloCentroTrabajo = getModelForClass(CentrosTrabajo);
+export const ModeloCentroTrabajo = getModelForClass(CentrosTrabajo, {
+  schemaOptions: { timestamps: true },
+});

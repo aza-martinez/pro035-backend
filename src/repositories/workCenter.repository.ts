@@ -1,9 +1,25 @@
 import { BaseRepository } from "./base.repository";
-import { ModeloCentroTrabajo } from "./../entities/workCenter.enitie";
+import {
+  ModeloCentroTrabajo,
+  CentrosTrabajo,
+} from "./../entities/workCenter.enitie";
 
 export class WorkCenterRepository extends BaseRepository {
   constructor() {
     super(ModeloCentroTrabajo);
+  }
+
+  async create(workCenter: CentrosTrabajo) {
+    const workCenterExists = await ModeloCentroTrabajo.exists({
+      $and: [{ nombre: workCenter.nombre }, { empresa: workCenter.empresa }],
+    });
+
+    if (workCenterExists)
+      throw new Error(
+        `Ya exste un centro trabajo con el nombre "${workCenter.nombre}"`
+      );
+
+    return await ModeloCentroTrabajo.create(workCenter);
   }
 
   async getWorkCentersByCompany(company: string, client: string) {
