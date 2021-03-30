@@ -2,7 +2,10 @@ import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { CentrosTrabajo } from "../../entities/workCenter.enitie";
 import { Context } from "../../interfaces/context.interface";
 import { WorkCenterService } from "../../services/workCenter.service";
-import { WorkCenterInput, WorkCenterUpdateInput } from "../types/workCenter.input";
+import {
+  WorkCenterInput,
+  WorkCenterUpdateInput,
+} from "../types/workCenter.input";
 
 @Resolver()
 export class WorkCenterResolver {
@@ -52,10 +55,19 @@ export class WorkCenterResolver {
     @Arg("input") input: WorkCenterUpdateInput,
     @Ctx() { user }: Context
   ) {
+    return await this.#workCenterService.update(workCenterId, input, user.cid);
+  }
+
+  @Authorized("Administrador")
+  @Mutation((_returns) => CentrosTrabajo, { nullable: true })
+  async deleteWorkCenter(
+    @Arg("id") workCenterId: String,
+    @Ctx() { user }: Context
+  ) {
     return await this.#workCenterService.update(
       workCenterId,
-      input,
+      { estatus: false },
       user.cid
-    )
+    );
   }
 }

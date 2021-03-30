@@ -85,6 +85,7 @@ type Mutation {
   createAuthor(author: AuthorInput!): Author!
   createBook(book: BookInput!): Book!
   createWorkCenter(workCenter: WorkCenterInput!): CentrosTrabajo
+  deleteWorkCenter(id: String!): CentrosTrabajo
   updateUser(id: String!, input: UsuarioInputUpdate!): Usuario
   updateWorkCenter(id: String!, input: WorkCenterUpdateInput!): CentrosTrabajo
 }

@@ -11,7 +11,11 @@ export class WorkCenterRepository extends BaseRepository {
 
   async create(workCenter: CentrosTrabajo) {
     const workCenterExists = await ModeloCentroTrabajo.exists({
-      $and: [{ nombre: workCenter.nombre }, { empresa: workCenter.empresa }],
+      $and: [
+        { nombre: workCenter.nombre },
+        { empresa: workCenter.empresa },
+        { estatus: true },
+      ],
     });
 
     if (workCenterExists)
