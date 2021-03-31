@@ -1,9 +1,11 @@
-import { getModelForClass, Prop as Property } from "@typegoose/typegoose";
+import { getModelForClass, plugin, Prop as Property } from "@typegoose/typegoose";
 import { Field, ID, ObjectType } from "type-graphql";
 import { Cliente } from "./client.entitie";
 import { Empresa } from "./company.entitie";
 import { CentrosTrabajo } from "./workCenter.enitie";
+import autopopulate from "mongoose-autopopulate";
 
+@plugin(autopopulate as any)
 @ObjectType({ description: "Workplaces of users" })
 export class AreasTrabajo {
   @Field(() => ID)
@@ -22,7 +24,7 @@ export class AreasTrabajo {
   estatus: boolean;
 
   @Field(() => [CentrosTrabajo], { nullable: true })
-  @Property({ ref: CentrosTrabajo })
+  @Property({ ref: CentrosTrabajo, autopopulate: true })
   centrosTrabajo: [string] | [CentrosTrabajo];
 
   @Field(() => Empresa)
@@ -32,10 +34,8 @@ export class AreasTrabajo {
   @Field(() => Cliente)
   @Property({ required: true, ref: Cliente })
   cliente: string | Cliente;
-
-  createdAt: Date;
-
-  updatedAt: Date;
 }
 
-export const AreasTrabajoModelo = getModelForClass(AreasTrabajo);
+export const AreasTrabajoModelo = getModelForClass(AreasTrabajo, {
+  schemaOptions: { timestamps: true },
+});

@@ -110,6 +110,7 @@ type Query {
   user(company: String!, id: String!): Usuario
   users: [Usuario!]
   usersByCompany(company: String!): [Usuario!]
+  workAreasByCompany(company: String!): [AreasTrabajo!]
   workCenterByCompany(company: String!, workCenter: String!): CentrosTrabajo
   workCentersByCompany(company: String!): [CentrosTrabajo!]
 }

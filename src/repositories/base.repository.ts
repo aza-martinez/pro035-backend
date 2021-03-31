@@ -14,6 +14,12 @@ export class BaseRepository {
     return await this.#model.find();
   }
 
+  async getAllByCompany(company: string, client: string) {
+    return await this.#model.find({
+      $and: [{ cliente: client }, { empresa: company }, { estatus: true }],
+    });
+  }
+
   async create(entity: object) {
     return await this.#model.create(entity);
   }

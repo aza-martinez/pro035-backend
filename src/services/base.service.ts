@@ -19,4 +19,8 @@ export class BaseService {
   async update(id: string, entity: object, client: string) {
     return await this.#repository.update(id, entity, client);
   }
+
+  async getAllByCompany(company: string, client: string) {
+    return await this.#repository.getAllByCompany(company, client);
+  }
 }
