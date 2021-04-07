@@ -87,6 +87,7 @@ type Mutation {
   createWorkCenter(workCenter: WorkCenterInput!): CentrosTrabajo
   deleteWorkCenter(id: String!): CentrosTrabajo
   updateUser(id: String!, input: UsuarioInputUpdate!): Usuario
+  updateWorkArea(id: String!, input: WorkAreaUpdateInput!): AreasTrabajo
   updateWorkCenter(id: String!, input: WorkCenterUpdateInput!): CentrosTrabajo
 }
 
@@ -110,6 +111,7 @@ type Query {
   user(company: String!, id: String!): Usuario
   users: [Usuario!]
   usersByCompany(company: String!): [Usuario!]
+  workAreaByCompany(company: String!, workArea: String!): AreasTrabajo
   workAreasByCompany(company: String!): [AreasTrabajo!]
   workCenterByCompany(company: String!, workCenter: String!): CentrosTrabajo
   workCentersByCompany(company: String!): [CentrosTrabajo!]
@@ -175,6 +177,19 @@ input UsuarioInputUpdate {
   tipoPersonal: String
   tipoPuesto: String
   usuario: String
+}
+
+input WorkAreaInput {
+  centrosTrabajo: [String!]!
+  descripcion: String
+  empresa: String!
+  nombre: String!
+}
+
+input WorkAreaUpdateInput {
+  centrosTrabajo: [String!]!
+  descripcion: String
+  nombre: String!
 }
 
 input WorkCenterInput {
