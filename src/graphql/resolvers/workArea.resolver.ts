@@ -52,4 +52,17 @@ export class WorkAreaResolver {
       cliente: user.cid,
     });
   }
+
+  @Authorized("Administrador")
+  @Mutation((_returns) => AreasTrabajo, { nullable: true })
+  async deleteWorkArea(
+    @Arg("id") workAreaId: String,
+    @Ctx() { user }: Context
+  ) {
+    return await this.#workAreaService.update(
+      workAreaId,
+      { estatus: false },
+      user.cid
+    );
+  }
 }
