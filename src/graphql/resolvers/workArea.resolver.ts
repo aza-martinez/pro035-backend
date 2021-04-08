@@ -2,7 +2,7 @@ import { Resolver, Query, Authorized, Arg, Ctx, Mutation } from "type-graphql";
 import { AreasTrabajo } from "../../entities/workAreas.entitie";
 import { Context } from "../../interfaces/context.interface";
 import { WorkAreaService } from "../../services/workArea.service";
-import { WorkAreaUpdateInput } from "./../types/workArea.input";
+import { WorkAreaInput, WorkAreaUpdateInput } from "./../types/workArea.input";
 
 @Resolver()
 export class WorkAreaResolver {
@@ -39,5 +39,17 @@ export class WorkAreaResolver {
     @Ctx() { user }: Context
   ): Promise<AreasTrabajo> {
     return await this.#workAreaService.update(workAreaId, input, user.cid);
+  }
+
+  @Authorized("Administrador")
+  @Mutation((_returns) => AreasTrabajo, { nullable: true })
+  async createWorkArea(
+    @Arg("input") input: WorkAreaInput,
+    @Ctx() { user }: Context
+  ): Promise<AreasTrabajo> {
+    return await this.#workAreaService.create({
+      ...input,
+      cliente: user.cid,
+    });
   }
 }
