@@ -100,7 +100,7 @@ type Puesto {
   empresa: Empresa
   estatus: Boolean!
   id: ID!
-  nombre: String!
+  nombre: String
 }
 
 type Query {
@@ -110,6 +110,7 @@ type Query {
   books: [Book!]
   companies: [Empresa!]
   companiesByClient: [Empresa!]
+  positionsByCompany(company: String!): [Puesto!]
   user(company: String!, id: String!): Usuario
   users: [Usuario!]
   usersByCompany(company: String!): [Usuario!]

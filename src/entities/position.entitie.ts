@@ -8,7 +8,7 @@ export class Puesto {
   @Field(() => ID)
   id: string;
 
-  @Field()
+  @Field({ nullable: true})
   @Property({ required: true, trim: true })
   nombre: string;
 
@@ -27,11 +27,8 @@ export class Puesto {
   @Field(() => Empresa, { nullable: true })
   @Property({ required: true, ref: Empresa })
   empresa: string | Empresa;
-
-  createdAt: Date;
-
-  updatedAt: Date;
 }
 
-
-export const PuestoModelo = getModelForClass(Puesto);
+export const PuestoModelo = getModelForClass(Puesto, {
+  schemaOptions: { timestamps: true },
+});
