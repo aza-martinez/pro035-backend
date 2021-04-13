@@ -84,13 +84,26 @@ type Empresa {
 type Mutation {
   createAuthor(author: AuthorInput!): Author!
   createBook(book: BookInput!): Book!
+  createPosition(input: PositionInput!): Puesto
   createWorkArea(input: WorkAreaInput!): AreasTrabajo
   createWorkCenter(workCenter: WorkCenterInput!): CentrosTrabajo
   deleteWorkArea(id: String!): AreasTrabajo
   deleteWorkCenter(id: String!): CentrosTrabajo
+  updatePosition(id: String!, input: PositionUpdateInput!): Puesto
   updateUser(id: String!, input: UsuarioInputUpdate!): Usuario
   updateWorkArea(id: String!, input: WorkAreaUpdateInput!): AreasTrabajo
   updateWorkCenter(id: String!, input: WorkCenterUpdateInput!): CentrosTrabajo
+}
+
+input PositionInput {
+  descripcion: String!
+  empresa: String!
+  nombre: String!
+}
+
+input PositionUpdateInput {
+  descripcion: String!
+  nombre: String!
 }
 
 """Jobs Positions of Users"""
@@ -110,6 +123,7 @@ type Query {
   books: [Book!]
   companies: [Empresa!]
   companiesByClient: [Empresa!]
+  positionByCompany(company: String!, position: String!): Puesto
   positionsByCompany(company: String!): [Puesto!]
   user(company: String!, id: String!): Usuario
   users: [Usuario!]
