@@ -53,4 +53,18 @@ export class PositionResolver {
   ): Promise<Puesto> {
     return await this.#positionService.update(positionId, input, user.cid);
   }
+
+  @Authorized("Administrador")
+  @Mutation((_returns) => Puesto, { nullable: true })
+  async deletePosition(
+    @Arg("id") positionId: String,
+    @Ctx() { user }: Context
+  ) {
+    return await this.#positionService.update(
+      positionId,
+      { estatus: false },
+      user.cid
+    );
+  }
+  
 }

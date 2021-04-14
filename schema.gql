@@ -87,6 +87,7 @@ type Mutation {
   createPosition(input: PositionInput!): Puesto
   createWorkArea(input: WorkAreaInput!): AreasTrabajo
   createWorkCenter(workCenter: WorkCenterInput!): CentrosTrabajo
+  deletePosition(id: String!): Puesto
   deleteWorkArea(id: String!): AreasTrabajo
   deleteWorkCenter(id: String!): CentrosTrabajo
   updatePosition(id: String!, input: PositionUpdateInput!): Puesto
@@ -103,6 +104,7 @@ input PositionInput {
 
 input PositionUpdateInput {
   descripcion: String!
+  empresa: String
   nombre: String!
 }
 

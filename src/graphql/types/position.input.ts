@@ -19,4 +19,7 @@ export class PositionUpdateInput {
 
   @Field()
   descripcion: String;
+
+  @Field({ nullable: true })
+  empresa: String;
 }
