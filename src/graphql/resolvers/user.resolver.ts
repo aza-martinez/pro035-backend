@@ -11,7 +11,7 @@ export class UserResolver {
   constructor() {
     this.#userService = new UserService();
   }
-  @Authorized('Administrador', 'Empleado')
+  @Authorized("Administrador", "Empleado")
   @Query((_returns) => Usuario, { nullable: true })
   async user(
     @Arg("id") userID: string,
@@ -51,11 +51,20 @@ export class UserResolver {
   async createUser(
     @Arg("user") userInput: UserInput,
     @Ctx() { user }: Context
-  ) {
+  ): Promise<Usuario> {
     return await this.#userService.create({
       ...userInput,
       cliente: user.cid,
       perfil: "Empleado",
     });
+  }
+
+  @Authorized("Administrador")
+  @Mutation(() => Usuario, { nullable: true })
+  async deleteUser(
+    @Arg("id") userId: String,
+    @Ctx() { user }: Context
+  ): Promise<Usuario> {
+    return await this.#userService.update(userId, { estatus: false }, user.cid);
   }
 }
