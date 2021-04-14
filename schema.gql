@@ -92,7 +92,7 @@ type Mutation {
   deleteWorkArea(id: String!): AreasTrabajo
   deleteWorkCenter(id: String!): CentrosTrabajo
   updatePosition(id: String!, input: PositionUpdateInput!): Puesto
-  updateUser(id: String!, input: UsuarioInputUpdate!): Usuario
+  updateUser(id: String!, input: UserUpdateInput!): Usuario
   updateWorkArea(id: String!, input: WorkAreaUpdateInput!): AreasTrabajo
   updateWorkCenter(id: String!, input: WorkCenterUpdateInput!): CentrosTrabajo
 }
@@ -148,6 +148,29 @@ input UserInput {
   usuario: String!
 }
 
+input UserUpdateInput {
+  apellidoMaterno: String!
+  apellidoPaterno: String!
+  areaTrabajo: String
+  centroTrabajo: String!
+  email: String!
+  estadoCivil: String
+  experienciaPuestoActual: String
+  genero: String
+  nivelEstudios: String
+  nombre: String!
+  password: String
+  puesto: String
+  rangoEdad: String
+  rolarTurnos: String
+  tiempoExperienciaLaboral: String
+  tipoContratacion: String
+  tipoJornada: String
+  tipoPersonal: String
+  tipoPuesto: String
+  usuario: String!
+}
+
 """The books model"""
 type Usuario {
   apellidoMaterno: String!
@@ -175,30 +198,6 @@ type Usuario {
   tipoPersonal: String
   tipoPuesto: String
   usuario: String!
-}
-
-input UsuarioInputUpdate {
-  apellidoMaterno: String
-  apellidoPaterno: String
-  areaTrabajo: String
-  centroTrabajo: String
-  email: String
-  estadoCivil: String
-  experienciaPuestoActual: String
-  genero: String
-  nivelEstudios: String
-  nombre: String
-  password: String
-  perfil: String
-  puesto: String
-  rangoEdad: String
-  rolarTurnos: String
-  tiempoExperienciaLaboral: String
-  tipoContratacion: String
-  tipoJornada: String
-  tipoPersonal: String
-  tipoPuesto: String
-  usuario: String
 }
 
 input WorkAreaInput {

@@ -1,6 +1,6 @@
 import { Query, Resolver, Mutation, Arg, Ctx, Authorized } from "type-graphql";
 import { Context } from "../../interfaces/context.interface";
-import { UserInput, UsuarioInputUpdate } from "../types/user.input";
+import { UserInput, UserUpdateInput } from "../types/user.input";
 import { Usuario } from "./../../entities/user.entitie";
 import { UserService } from "./../../services/user.service";
 
@@ -11,7 +11,7 @@ export class UserResolver {
   constructor() {
     this.#userService = new UserService();
   }
-
+  @Authorized('Administrador', 'Empleado')
   @Query((_returns) => Usuario, { nullable: true })
   async user(
     @Arg("id") userID: string,
@@ -40,7 +40,7 @@ export class UserResolver {
   @Mutation(() => Usuario, { nullable: true })
   async updateUser(
     @Arg("id") id: string,
-    @Arg("input") entity: UsuarioInputUpdate,
+    @Arg("input") entity: UserUpdateInput,
     @Ctx() { user }: Context
   ) {
     return await this.#userService.update(id, { ...entity }, user.cid);
