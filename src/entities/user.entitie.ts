@@ -27,6 +27,14 @@ import { hashPassword } from "../helpers/hashPassword.helper";
     delete user._update.password;
   }
 })
+@pre<Usuario>("save", function () {
+  const user: any = this;
+
+  if (user.password) {
+    const hashedPassword: string = hashPassword(user.password);
+    user.password = hashedPassword;
+  }
+})
 export class Usuario {
   @Field(() => ID)
   id: string;
@@ -44,11 +52,11 @@ export class Usuario {
   apellidoMaterno: string;
 
   @Field()
-  @Property({ required: true, trim: true })
+  @Property({ required: true, trim: true, unique: true })
   email: string;
 
   @Field()
-  @Property({ required: true, trim: true })
+  @Property({ required: true, trim: true, unique: true })
   usuario: string;
 
   @Field()

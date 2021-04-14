@@ -1,6 +1,6 @@
 import { Query, Resolver, Mutation, Arg, Ctx, Authorized } from "type-graphql";
 import { Context } from "../../interfaces/context.interface";
-import { UsuarioInputUpdate } from "../types/usuario.input";
+import { UserInput, UsuarioInputUpdate } from "../types/user.input";
 import { Usuario } from "./../../entities/user.entitie";
 import { UserService } from "./../../services/user.service";
 
@@ -44,5 +44,18 @@ export class UserResolver {
     @Ctx() { user }: Context
   ) {
     return await this.#userService.update(id, { ...entity }, user.cid);
+  }
+
+  @Authorized("Administrador")
+  @Mutation(() => Usuario, { nullable: true })
+  async createUser(
+    @Arg("user") userInput: UserInput,
+    @Ctx() { user }: Context
+  ) {
+    return await this.#userService.create({
+      ...userInput,
+      cliente: user.cid,
+      perfil: "Empleado",
+    });
   }
 }

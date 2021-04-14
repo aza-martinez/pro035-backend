@@ -85,6 +85,7 @@ type Mutation {
   createAuthor(author: AuthorInput!): Author!
   createBook(book: BookInput!): Book!
   createPosition(input: PositionInput!): Puesto
+  createUser(user: UserInput!): Usuario
   createWorkArea(input: WorkAreaInput!): AreasTrabajo
   createWorkCenter(workCenter: WorkCenterInput!): CentrosTrabajo
   deletePosition(id: String!): Puesto
@@ -136,6 +137,17 @@ type Query {
   workCentersByCompany(company: String!): [CentrosTrabajo!]
 }
 
+input UserInput {
+  apellidoMaterno: String!
+  apellidoPaterno: String!
+  centroTrabajo: String!
+  email: String!
+  empresa: String!
+  nombre: String!
+  password: String!
+  usuario: String!
+}
+
 """The books model"""
 type Usuario {
   apellidoMaterno: String!
@@ -162,15 +174,6 @@ type Usuario {
   tipoJornada: String
   tipoPersonal: String
   tipoPuesto: String
-  usuario: String!
-}
-
-input UsuarioInputCreate {
-  apellidoMaterno: String!
-  apellidoPaterno: String!
-  email: String!
-  nombre: String!
-  password: String!
   usuario: String!
 }
 
