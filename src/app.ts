@@ -8,10 +8,12 @@ import { context } from "./helpers/context.helper";
 import { authChecker } from "./helpers/authChecker.helper";
 import compression from "compression";
 import helmet from "helmet";
+import { graphqlUploadExpress } from "graphql-upload";
 
 export async function startServer() {
   const app = express();
-
+  
+  app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }))
   const server = new ApolloServer({
     schema: await buildSchema({
       resolvers: [__dirname + "/**/*.resolver.{ts,js}"],
@@ -24,6 +26,7 @@ export async function startServer() {
     introspection: true,
     tracing: true,
     context,
+    uploads: false
   });
 
   app.use(helmet());

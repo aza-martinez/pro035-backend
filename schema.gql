@@ -66,6 +66,15 @@ type Cliente {
   rfc: String!
 }
 
+input CompanyInput {
+  alias: String!
+  cp: String!
+  direccion: String!
+  giro: String!
+  razonSocial: String!
+  rfc: String!
+}
+
 """Companies of clientes"""
 type Empresa {
   alias: String!
@@ -84,6 +93,7 @@ type Empresa {
 type Mutation {
   createAuthor(author: AuthorInput!): Author!
   createBook(book: BookInput!): Book!
+  createCompany(input: CompanyInput!, logo: Upload!): Empresa
   createPosition(input: PositionInput!): Puesto
   createUser(user: UserInput!): Usuario
   createWorkArea(input: WorkAreaInput!): AreasTrabajo
@@ -137,6 +147,9 @@ type Query {
   workCenterByCompany(company: String!, workCenter: String!): CentrosTrabajo
   workCentersByCompany(company: String!): [CentrosTrabajo!]
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 input UserInput {
   apellidoMaterno: String!

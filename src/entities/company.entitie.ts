@@ -51,4 +51,6 @@ export class Empresa {
   principalesActividades: string;
 }
 
-export const EmpresaModelo = getModelForClass(Empresa);
+export const EmpresaModelo = getModelForClass(Empresa, {
+  schemaOptions: { timestamps: true },
+});
