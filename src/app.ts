@@ -26,7 +26,7 @@ export async function startServer() {
     introspection: true,
     tracing: true,
     context,
-    uploads: false
+    uploads: false,    
   });
 
   app.use(helmet());
